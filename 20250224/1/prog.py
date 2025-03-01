@@ -29,4 +29,13 @@ class Gamer:
         
         print(f'Moved to ({self.x}, {self.y})')
 
+class Monster:
+    def __init__(self, x, y, phrase=''):
+        self.x = x
+        self.y = y
+        self.phrase = phrase
+
+    def say_hi(self):
+        print(cowsay.cowsay(self.phrase))
+
 
