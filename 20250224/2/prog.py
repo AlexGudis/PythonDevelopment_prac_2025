@@ -41,7 +41,7 @@ class Monster:
         self.name = name
 
     def say_hi(self):
-        print(cowsay.cowsay(self.phrase))
+        print(cowsay.cowsay(self.phrase, cow=self.name))
 
 class MUD:
     def __init__(self):
