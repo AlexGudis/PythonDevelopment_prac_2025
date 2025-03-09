@@ -80,7 +80,12 @@ class MUD:
             raise ValueError
         
         try:
-            params['hp'] = args[args.index('hp') + 1]
+            params['hp'] = int(args[args.index('hp') + 1])
+
+            if params['hp'] <= 0:
+                print('hp argument should be a positive integer')
+                raise ValueError
+
         except ValueError:
             raise ValueError
         
