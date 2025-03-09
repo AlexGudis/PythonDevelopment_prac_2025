@@ -112,6 +112,7 @@ class MUD:
 
                     params = self.create_params(s)
 
+
                     if params['name'] in cowsay.list_cows() or params['name'] == 'jgsbat':
 
                         m = Monster(params['coords'][0], params['coords'][1], params['hp'], params['name'], params['hello'])
