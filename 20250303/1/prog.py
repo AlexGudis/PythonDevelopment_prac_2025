@@ -77,22 +77,22 @@ class MUD:
         try:
             params['hello'] = args[args.index('hello') + 1]
         except ValueError:
+            print('Something wrong with hello string when trying to parse it to a monster')
             raise ValueError
         
         try:
             params['hp'] = int(args[args.index('hp') + 1])
-
             if params['hp'] <= 0:
-                print('hp argument should be a positive integer')
                 raise ValueError
-
         except ValueError:
+            print('hp argument should be a positive integer')
             raise ValueError
         
         try:
             start = args.index('coords')
             params['coords'] = (int(args[start + 1]), int(args[start + 2]))
         except ValueError:
+            print('Something wrong with coords when trying to parse it to a monster')
             raise ValueError
         
         return params
