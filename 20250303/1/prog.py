@@ -91,7 +91,7 @@ class MUD:
                     hello = s[4]
                     
 
-                    if name in cowsay.list_cows():
+                    if name in cowsay.list_cows() or name == 'jgsbat':
 
                         m = Monster(x,y,name,hello)
                         print(f'Added monster {name} to ({x}, {y}) saying {hello}')
