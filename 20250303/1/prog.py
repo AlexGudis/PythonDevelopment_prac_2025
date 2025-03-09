@@ -4,6 +4,23 @@
 
 import cowsay
 import sys
+from io import StringIO
+
+
+
+jgsbat = cowsay.read_dot_cow(StringIO(r"""
+    ,_                    _,
+    ) '-._  ,_    _,  _.-' (
+    )  _.-'.|\\\--//|.'-._  (
+     )'   .'\/o\/o\/'.   `(
+      ) .' . \====/ . '. (
+       )  / <<    >> \  (
+        '-._/``  ``\_.-'
+  jgs     __\\\'--'//__
+         (((""`  `"")))
+"""))
+
+
 
 class Gamer:
     def __init__(self, x, y):
@@ -41,7 +58,10 @@ class Monster:
         self.name = name
 
     def say_hi(self):
-        print(cowsay.cowsay(self.phrase, cow=self.name))
+        if self.name == 'jgsbat':
+            print(cowsay.cowsay(self.phrase, cowfile=jgsbat))
+        else:
+            print(cowsay.cowsay(self.phrase, cow=self.name))
 
 class MUD:
     def __init__(self):
