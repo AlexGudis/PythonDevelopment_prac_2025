@@ -124,6 +124,7 @@ def print_pole(pole):
         print(*el)
 
 
+print('<<< Welcome to Python-MUD 0.1 >>>')
 game = MUD()
 game.play()
 
