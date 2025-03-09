@@ -1,10 +1,7 @@
-# THIS IS named_monster BRANCH!!!
-
-
-
 import cowsay
 import sys
 from io import StringIO
+import shlex
 
 
 
@@ -19,7 +16,6 @@ jgsbat = cowsay.read_dot_cow(StringIO(r"""
   jgs     __\\\'--'//__
          (((""`  `"")))
 """))
-
 
 
 class Gamer:
@@ -51,9 +47,10 @@ class Gamer:
         print(f'Moved to ({self.x}, {self.y})')
 
 class Monster:
-    def __init__(self, x, y, name, phrase=''):
+    def __init__(self, x, y, hp, name, phrase=''):
         self.x = x
         self.y = y
+        self.hp = hp
         self.phrase = phrase
         self.name = name
 
@@ -72,33 +69,52 @@ class MUD:
         m = self.pole[y][x]
         m.say_hi()
 
+    def create_params(self, args):
+        params = {'name':'default', 'hello':'Uwu', 'hp':-1, 'coords':(0,0)}
+
+        params['name'] = args[args.index('addmon') + 1]
+    
+        try:
+            params['hello'] = args[args.index('hello') + 1]
+        except ValueError:
+            raise ValueError
+        
+        try:
+            params['hp'] = args[args.index('hp') + 1]
+        except ValueError:
+            raise ValueError
+        
+        try:
+            start = args.index('coords')
+            params['coords'] = (int(args[start + 1]), int(args[start + 2]))
+        except ValueError:
+            raise ValueError
+        
+        return params
+
+
     
     def play(self):
         g = Gamer(0, 0)
         while s := sys.stdin.readline():
             s = s[:-1]
-            #print(f'Input was = {s}')
-            #print('Where do u want to go? Chose one option: up, down, left, right')
             if s.startswith('addmon'):
-                s = s.split()
-                if len(s) < 5:
+                s = shlex.split(s)
+                if len(s) < 9 or len(s) > 10:
                     print("Invalid arguments")
                     continue
                 try:
-                    name = s[1]
-                    x = int(s[2])
-                    y = int(s[3])
-                    hello = s[4]
-                    
 
-                    if name in cowsay.list_cows() or name == 'jgsbat':
+                    params = self.create_params(s)
 
-                        m = Monster(x,y,name,hello)
-                        print(f'Added monster {name} to ({x}, {y}) saying {hello}')
-                        if (x,y) in self.monsters_coords:
+                    if params['name'] in cowsay.list_cows() or params['name'] == 'jgsbat':
+
+                        m = Monster(params['coords'][0], params['coords'][1], params['hp'], params['name'], params['hello'])
+                        print(f'Added monster {m.name} to ({m.x}, {m.y}) saying {m.phrase} with hp={m.hp}')
+                        if (m.x,m.y) in self.monsters_coords:
                             print("Replaced the old monster")
                         self.monsters_coords.add((m.x, m.y))
-                        self.pole[y][x] = m
+                        self.pole[m.y][m.x] = m
                     
                     else:
                         print("Cannot add unknown monster")
