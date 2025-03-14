@@ -147,20 +147,26 @@ class MUD(cmd.Cmd):
         self.check_pos()
 
     def do_attack(self, args):
+        if len(args) == 0:
+            print('Invalid input. You should provide at least name of the monster to attack')
+            return
+
         available_weapons = [k for k,v in self.weapons.items()]
         weapon = 'sword'
-        if len(args) != 0:
-            weapon = shlex.split(args)[-1]
+        args = shlex.split(args)
+        if 'with' in args: # Мы передали на вход какое-то оружие
+            weapon = args[-1]
         if weapon not in available_weapons:
             print('Unknown weapon')
             return
     
         x = self.g.x
         y = self.g.y
-        if (x,y) not in self.monsters_coords:
-            print('No monster here')
+
+        m = self.pole[y][x]
+        if m == '*' or m.name != args[0]: # монстра в принципе нет или нет с таким названием
+            print(f'No {args[0]} here')
         else:
-            m = self.pole[y][x]
             damage = self.weapons[weapon]
             if m.hp < damage:
                 damage = m.hp
@@ -179,19 +185,21 @@ class MUD(cmd.Cmd):
     def complete_attack(self, text, line, begidx, endidx):
         words = (line[:endidx] + ".").split()
         DICT = []
+        available_monsters = cowsay.list_cows() + ['jgsbat']
 
         match len(words):
-            case 2: # with должно автодостраиваться 
+            case 2: # attack ...
+                DICT = available_monsters
+            case 3: # attack <name> ...
                 DICT = ['with']
-            case 3: # уже введено with, значит должны быть варианты оружия
+            case 4: # attack <name> with ...
                 DICT = [k for k,v in self.weapons.items()]
 
         words[-1] = words[-1].replace('.', '')
         return [c for c in DICT if c.startswith(text)]
-
+    
     def do_EOF(self, args):
         return 1
-
 
 
 def print_pole(pole):
