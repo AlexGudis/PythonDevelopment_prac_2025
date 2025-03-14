@@ -70,6 +70,7 @@ class MUD(cmd.Cmd):
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
         self.monsters_coords = set()
         self.g = Gamer(0,0)
+        self.weapons = {'sword':10, 'spear':15, 'axe':20}
 
     def encounter(self, x, y):
         m = self.pole[y][x]
@@ -146,16 +147,22 @@ class MUD(cmd.Cmd):
         self.check_pos()
 
     def do_attack(self, args):
+        available_weapons = [k for k,v in self.weapons.items()]
+        weapon = 'sword'
+        if len(args) != 0:
+            weapon = shlex.split(args)[-1]
+        if weapon not in available_weapons:
+            print('Unknown weapon')
+            return
+    
         x = self.g.x
         y = self.g.y
         if (x,y) not in self.monsters_coords:
             print('No monster here')
         else:
             m = self.pole[y][x]
-            damage = 0
-            if m.hp >= 10:
-                damage = 10
-            else:
+            damage = self.weapons[weapon]
+            if m.hp < damage:
                 damage = m.hp
 
             m.hp -= damage
@@ -169,6 +176,18 @@ class MUD(cmd.Cmd):
                 print(f'{m.name} now has {m.hp}')
                 self.pole[y][x] = m
 
+    def complete_attack(self, text, line, begidx, endidx):
+        words = (line[:endidx] + ".").split()
+        DICT = []
+
+        match len(words):
+            case 2: # with должно автодостраиваться 
+                DICT = ['with']
+            case 3: # уже введено with, значит должны быть варианты оружия
+                DICT = [k for k,v in self.weapons.items()]
+
+        words[-1] = words[-1].replace('.', '')
+        return [c for c in DICT if c.startswith(text)]
 
     def do_EOF(self, args):
         return 1
