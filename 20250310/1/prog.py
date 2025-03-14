@@ -153,17 +153,21 @@ class MUD(cmd.Cmd):
         else:
             m = self.pole[y][x]
             damage = 0
-            if m.hp > 10:
+            if m.hp >= 10:
                 damage = 10
             else:
                 damage = m.hp
 
-            print(f'Attacked {m.name},  damage {damage} hp')
+            m.hp -= damage
+            print(f'Attacked {m.name}, damage {damage} hp')
 
             if m.hp == 0:
                 print(f'{m.name} died')
+                self.pole[y][x] = '*'
+                self.monsters_coords.remove((x, y))
             else:
                 print(f'{m.name} now has {m.hp}')
+                self.pole[y][x] = m
 
 
     def do_EOF(self, args):
