@@ -145,21 +145,26 @@ class MUD(cmd.Cmd):
         self.g.move('right')
         self.check_pos()
 
-
-    '''def play(self):
-        g = Gamer(0, 0)
-        while s := sys.stdin.readline():
-            s = s[:-1]
-            if s.startswith('addmon'):
-                self.addmon(s)
-            elif s == 'up' or s == 'down' or s == 'left' or s == 'right':
-                g.move(s)
-                if (g.x,g.y) in self.monsters_coords:
-                    self.encounter(g.x, g.y)
-
+    def do_attack(self, args):
+        x = self.g.x
+        y = self.g.y
+        if (x,y) not in self.monsters_coords:
+            print('No monster here')
+        else:
+            m = self.pole[y][x]
+            damage = 0
+            if m.hp > 10:
+                damage = 10
             else:
-                print('Invalid command')
-    '''
+                damage = m.hp
+
+            print(f'Attacked {m.name},  damage {damage} hp')
+
+            if m.hp == 0:
+                print(f'{m.name} died')
+            else:
+                print(f'{m.name} now has {m.hp}')
+
 
     def do_EOF(self, args):
         return 1
