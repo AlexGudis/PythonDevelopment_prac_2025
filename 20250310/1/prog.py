@@ -107,7 +107,7 @@ class MUD(cmd.Cmd):
 
     def do_addmon(self, s):
         s = shlex.split(s)
-        s.insert(0, 'addmon') # Переделывать весь разбор строки по параметрам не хочется
+        s.insert(0, 'addmon')
         if len(s) < 9 or len(s) > 10:
             print("Invalid arguments")
             return
