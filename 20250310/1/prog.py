@@ -69,6 +69,7 @@ class MUD(cmd.Cmd):
         super().__init__(completekey, stdin, stdout)
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
         self.monsters_coords = set()
+        self.g = Gamer(0,0)
 
     def encounter(self, x, y):
         m = self.pole[y][x]
@@ -124,8 +125,27 @@ class MUD(cmd.Cmd):
         except ValueError:
             print("Invalid arguments")
 
+    def check_pos(self):
+        if (self.g.x,self.g.y) in self.monsters_coords:
+            self.encounter(self.g.x, self.g.y)
 
+    def do_up(self, s):
+        self.g.move('up')
+        self.check_pos()
     
+    def do_down(self, s):
+        self.g.move('down')
+        self.check_pos()
+
+    def do_left(self, s):
+        self.g.move('left')
+        self.check_pos()
+
+    def do_right(self, s):
+        self.g.move('right')
+        self.check_pos()
+
+
     '''def play(self):
         g = Gamer(0, 0)
         while s := sys.stdin.readline():
