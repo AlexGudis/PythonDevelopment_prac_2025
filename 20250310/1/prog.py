@@ -175,6 +175,18 @@ class MUD(cmd.Cmd):
                 print(f'{m.name} now has {m.hp}')
                 self.pole[y][x] = m
 
+    def complete_attack(self, text, line, begidx, endidx):
+        words = (line[:endidx] + ".").split()
+        DICT = []
+        available_monsters = cowsay.list_cows() + ['jgsbat']
+
+        match len(words):
+            case 2: # with должно автодостраиваться 
+                DICT = available_monsters
+
+        words[-1] = words[-1].replace('.', '')
+        return [c for c in DICT if c.startswith(text)]
+
 
     def do_EOF(self, args):
         return 1
