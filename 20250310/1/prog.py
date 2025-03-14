@@ -148,10 +148,16 @@ class MUD(cmd.Cmd):
     def do_attack(self, args):
         x = self.g.x
         y = self.g.y
-        if (x,y) not in self.monsters_coords:
-            print('No monster here')
+
+        if len(args) == 0:
+            print('Invalid input. You should provide name of the monster to attack')
+            return
+
+        m = self.pole[y][x]
+        args = shlex.split(args)
+        if m == '*' or m.name != args[0]: # монстра в принципе нет или нет с таким названием
+            print(f'No {args[0]} here')
         else:
-            m = self.pole[y][x]
             damage = 0
             if m.hp >= 10:
                 damage = 10
