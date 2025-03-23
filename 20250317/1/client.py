@@ -46,17 +46,6 @@ class client(cmd.Cmd):
             print(f"{name} died")
         else:
             print(f"{name} now has {hp}")
-    
-    def response_move(self):
-        response = self.s.recv(1024).rstrip().decode().split()
-        print(f"Moved to ({int(response[0])}, {int(response[1])})")
-        if len(response) > 2:
-            hello = ' '.join(response[3:])
-            if response[2] == 'jgsbat':
-                print(cowsay.cowsay(hello, cowfile=jgsbat))
-            else:
-                print(cowsay.cowsay(hello, cow=response[2]))
-
 
 
     def addmon_params_check(self, args):
@@ -104,6 +93,51 @@ class client(cmd.Cmd):
 
 
 
+    def response_move(self):
+        response = self.s.recv(1024).rstrip().decode().split()
+        print(response)
+        print(f"Moved to ({int(response[0])}, {int(response[1])})")
+        if len(response) > 2:
+            hello = ' '.join(response[3:])
+            if response[2] == 'jgsbat':
+                print(cowsay.cowsay(hello, cowfile=jgsbat))
+            else:
+                print(cowsay.cowsay(hello, cow=response[2]))
+
+    def do_up(self, args):
+        self.s.sendall(f"move 0 -1\n".encode())
+        self.response_move()
+
+    def do_down(self, args):
+        self.s.sendall(f"move 0 1\n".encode())
+        self.response_move()
+
+    def do_left(self, args):
+        self.s.sendall(f"move -1 0\n".encode())
+        self.response_move()
+
+    def do_right(self, args):
+        self.s.sendall(f"move 1 0\n".encode())
+        self.response_move()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def do_attack(self, args):
         try:
@@ -113,36 +147,6 @@ class client(cmd.Cmd):
         except Error as e:
             print(e.text)
     
-    
-    def do_up(self, args):
-        if len(args) != 0:
-            print(Error(1).text)
-        else:
-            self.s.sendall(f"move 0 -1\n".encode())
-            self.response_move()
-
-    def do_down(self, args):
-        if len(args) != 0:
-            print(Error(1).text)
-        else:
-            self.s.sendall(f"move 0 1\n".encode())
-            self.response_move()
-
-    def do_left(self, args):
-        if len(args) != 0:
-            print(Error(1).text)
-        else:
-            self.s.sendall(f"move -1 0\n".encode())
-            self.response_move()
-
-    def do_right(self, args):
-        if len(args) != 0:
-            print(Error(1).text)
-        else:
-            self.s.sendall(f"move 1 0\n".encode())
-            self.response_move()
-    
-
     def complete_attack(self, text, line, begidx, endidx):
         words = (line[:endidx] + ".").split()
         DICT = []
