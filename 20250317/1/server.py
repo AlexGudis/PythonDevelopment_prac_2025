@@ -81,41 +81,26 @@ class MUD(cmd.Cmd):
         if (self.g.x,self.g.y) in self.monsters_coords:
             self.encounter(self.g.x, self.g.y)
 
-    def do_attack(self, args):
-        if len(args) == 0:
-            print('Invalid input. You should provide at least name of the monster to attack')
-            return
-
-        available_weapons = [k for k,v in self.weapons.items()]
-        weapon = 'sword'
-        args = shlex.split(args)
-        if 'with' in args: # Мы передали на вход какое-то оружие
-            weapon = args[-1]
-        if weapon not in available_weapons:
-            print('Unknown weapon')
-            return
-    
-        x = self.g.x
-        y = self.g.y
+    def do_attack(self, x, y, weapon, name):
 
         m = self.pole[y][x]
-        if m == '*' or m.name != args[0]: # монстра в принципе нет или нет с таким названием
-            print(f'No {args[0]} here')
+        if m == '*' or m.name != name: # монстра в принципе нет или нет с таким названием
+            return 'no'
+
         else:
             damage = self.weapons[weapon]
             if m.hp < damage:
                 damage = m.hp
 
             m.hp -= damage
-            print(f'Attacked {m.name}, damage {damage} hp')
 
             if m.hp == 0:
-                print(f'{m.name} died')
                 self.pole[y][x] = '*'
                 self.monsters_coords.remove((x, y))
+                return f'{damage} 0'
             else:
-                print(f'{m.name} now has {m.hp}')
                 self.pole[y][x] = m
+                return f'{damage} {m.hp}'
 
 
 async def echo(reader, writer):
@@ -142,7 +127,7 @@ async def echo(reader, writer):
                     case ['attack', *args]:
                         x, y = player.x, player.y
                         weapon, name = args
-                        writer.write(game.attack(x, y, int(weapon), name).encode())
+                        writer.write(game.do_attack(x, y, weapon, name).encode())
                     case ['move', *args]:
                         d_x, d_y = [int(i) for i in args]
                         writer.write(game.moving(player, d_x, d_y).encode())

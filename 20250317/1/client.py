@@ -34,18 +34,6 @@ class client(cmd.Cmd):
         self.s = socket
         self.s.connect((self.host, self.port))
         return super().__init__(*args, **kwargs)
-    
-    def response_attack(self, name):
-        response = self.s.recv(1024).rstrip().decode()
-        if response == 'no':
-            print(f"No {name} here")
-            return
-        damage, hp = [int(i) for i in response.split()]
-        print(f"Attacked {name}, damage {damage} hp")
-        if hp == 0:
-            print(f"{name} died")
-        else:
-            print(f"{name} now has {hp}")
 
 
     def addmon_params_check(self, args):
@@ -122,30 +110,34 @@ class client(cmd.Cmd):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def response_attack(self, name):
+        response = self.s.recv(1024).rstrip().decode()
+        if response == 'no':
+            print(f"No {name} here")
+            return
+        damage, hp = [int(i) for i in response.split()]
+        print(f"Attacked {name}, damage {damage} hp")
+        if hp == 0:
+            print(f"{name} died")
+        else:
+            print(f"{name} now has {hp}")
 
     def do_attack(self, args):
-        try:
-            weapon, name = attack_check(args)
-            self.s.sendall(f"attack {weapon} {name}\n".encode())
-            self.response_attack(name)
-        except Error as e:
-            print(e.text)
+        if len(args) == 0:
+            print('Invalid input. You should provide at least name of the monster to attack')
+            return
+
+        available_weapons =  ['sword', 'spear', 'axe']
+        weapon = 'sword'
+        args = shlex.split(args)
+        if 'with' in args: # Мы передали на вход какое-то оружие
+            weapon = args[-1]
+        if weapon not in available_weapons:
+            print('Unknown weapon')
+            return
+        
+        self.s.sendall(f"attack {weapon} {args[0]}\n".encode())
+        self.response_attack(args[0])
     
     def complete_attack(self, text, line, begidx, endidx):
         words = (line[:endidx] + ".").split()
@@ -158,7 +150,7 @@ class client(cmd.Cmd):
             case 3: # attack <name> ...
                 DICT = ['with']
             case 4: # attack <name> with ...
-                DICT = [k for k,v in self.weapons.items()]
+                DICT = ['sword', 'spear', 'axe']
 
         words[-1] = words[-1].replace('.', '')
         return [c for c in DICT if c.startswith(text)]
