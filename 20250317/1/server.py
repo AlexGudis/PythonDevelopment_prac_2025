@@ -26,28 +26,10 @@ class Gamer:
         self.x = x
         self.y = y
 
-    def move(self, where):
-        if where == 'up':
-            self.y -= 1
-            if self.y < 0:
-                self.y = 9
-
-        if where == 'down':
-            self.y += 1
-            if self.y > 9:
-                self.y = 0
-        
-        if where == 'left':
-            self.x -= 1
-            if self.x < 0:
-                self.x = 9
-        
-        if where == 'right':
-            self.x += 1
-            if self.x > 9:
-                self.x = 0
-        
-        print(f'Moved to ({self.x}, {self.y})')
+    def move(self, d_x, d_y):
+        self.x = (self.x + d_x) % 10
+        self.y = (self.y + d_y) % 10
+        return f"{self.x} {self.y}"
 
 class Monster:
     def __init__(self, x, y, hp, name, phrase=''):
@@ -74,12 +56,21 @@ class MUD(cmd.Cmd):
         self.weapons = {'sword':10, 'spear':15, 'axe':20}
 
     def encounter(self, x, y):
-        m = self.pole[y][x]
-        m.say_hi()
+        if (x,y) in self.monsters_coords:
+            return f' {self.pole[y][x].name} {self.pole[y][x].phrase}'
+        return ''
+
+    def moving(self, player, d_x, d_y):
+        s = player.move(d_x, d_y)
+        if (player.x, player.y) in self.monsters_coords:
+            s += self.encounter(player.x, player.y)
+        print(s)
+        return s
 
     def do_addmon(self, x, y, hp, hello, name):
         repl = '0'
         m = Monster(x, y, hp, name, hello)
+        print(f'Created monster with {hello} phrase')
         if (m.x,m.y) in self.monsters_coords:
             repl = '1'
         self.monsters_coords.add((m.x, m.y))
@@ -89,22 +80,6 @@ class MUD(cmd.Cmd):
     def check_pos(self):
         if (self.g.x,self.g.y) in self.monsters_coords:
             self.encounter(self.g.x, self.g.y)
-
-    def do_up(self, s):
-        self.g.move('up')
-        self.check_pos()
-    
-    def do_down(self, s):
-        self.g.move('down')
-        self.check_pos()
-
-    def do_left(self, s):
-        self.g.move('left')
-        self.check_pos()
-
-    def do_right(self, s):
-        self.g.move('right')
-        self.check_pos()
 
     def do_attack(self, args):
         if len(args) == 0:
@@ -161,7 +136,8 @@ async def echo(reader, writer):
                 match request.result().decode().split():
                     case ['addmon', *args]:
                         name, x, y, hp = args[:4]
-                        hello = ' '.join(args[5:])
+                        hello = ' '.join(args[4:])
+                        #print(f'Server gets args with addmon command: name = {name}, x = {x}, y = {y}, hp = {hp}, hello = {hello}')
                         writer.write(game.do_addmon(int(x), int(y), int(hp), hello, name).encode())
                     case ['attack', *args]:
                         x, y = player.x, player.y
