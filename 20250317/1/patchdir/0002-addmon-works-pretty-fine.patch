@@ -1,0 +1,384 @@
+From de14e0543d47a356d3e245d5aa385d481dbcb571 Mon Sep 17 00:00:00 2001
+From: AlexGudis <gudis2003@mail.ru>
+Date: Sun, 23 Mar 2025 21:42:26 +0300
+Subject: [PATCH 2/5] addmon works pretty fine
+
+---
+ 20250317/1/client.py | 169 ++++++++++++++++++++++++++++++++++++++
+ 20250317/1/server.py | 188 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 357 insertions(+)
+ create mode 100644 20250317/1/client.py
+ create mode 100644 20250317/1/server.py
+
+diff --git a/20250317/1/client.py b/20250317/1/client.py
+new file mode 100644
+index 0000000..cc59b32
+--- /dev/null
++++ b/20250317/1/client.py
+@@ -0,0 +1,169 @@
++import cowsay
++import sys
++from io import StringIO
++import shlex
++import readline
++import cmd
++import socket
++
++
++
++jgsbat = cowsay.read_dot_cow(StringIO(r"""
++    ,_                    _,
++    ) '-._  ,_    _,  _.-' (
++    )  _.-'.|\\\--//|.'-._  (
++     )'   .'\/o\/o\/'.   `(
++      ) .' . \====/ . '. (
++       )  / <<    >> \  (
++        '-._/``  ``\_.-'
++  jgs     __\\\'--'//__
++         (((""`  `"")))
++"""))
++
++
++
++class client(cmd.Cmd):
++    prompt = 'MUD> '
++    intro = "<<< Welcome to Python-MUD 0.1 >>>"
++
++    readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
++    host = "localhost" if len(sys.argv) < 2 else sys.argv[1]
++    port = 1337 if len(sys.argv) < 3 else int(sys.argv[2])
++
++    def __init__(self, *args, socket, **kwargs):
++        self.s = socket
++        self.s.connect((self.host, self.port))
++        return super().__init__(*args, **kwargs)
++    
++    def response_attack(self, name):
++        response = self.s.recv(1024).rstrip().decode()
++        if response == 'no':
++            print(f"No {name} here")
++            return
++        damage, hp = [int(i) for i in response.split()]
++        print(f"Attacked {name}, damage {damage} hp")
++        if hp == 0:
++            print(f"{name} died")
++        else:
++            print(f"{name} now has {hp}")
++    
++    def response_move(self):
++        response = self.s.recv(1024).rstrip().decode().split()
++        print(f"Moved to ({int(response[0])}, {int(response[1])})")
++        if len(response) > 2:
++            hello = ' '.join(response[3:])
++            if response[2] == 'jgsbat':
++                print(cowsay.cowsay(hello, cowfile=jgsbat))
++            else:
++                print(cowsay.cowsay(hello, cow=response[2]))
++
++
++
++    def addmon_params_check(self, args):
++        args = shlex.split(args)
++        args.insert(0, 'addmon')
++        params = {'name':'default', 'hello':'Uwu', 'hp':-1, 'coords':(0,0)}
++        params['name'] = args[args.index('addmon') + 1]
++    
++        try:
++            params['hello'] = args[args.index('hello') + 1]
++        except ValueError:
++            print('Something wrong with hello string when trying to parse it to a monster')
++            raise ValueError
++        
++        try:
++            params['hp'] = int(args[args.index('hp') + 1])
++            if params['hp'] <= 0:
++                raise ValueError
++        except ValueError:
++            print('hp argument should be a positive integer')
++            raise ValueError
++        
++        try:
++            start = args.index('coords')
++            params['coords'] = (int(args[start + 1]), int(args[start + 2]))
++        except ValueError:
++            print('Something wrong with coords when trying to parse it to a monster')
++            raise ValueError
++        
++        return params['coords'][0], params['coords'][1], params['hp'], params['hello'], params['name']
++    
++    def do_addmon(self, args):
++        try:
++            x, y, hp, hello, name = self.addmon_params_check(args)
++            self.s.sendall(f"addmon {name} {x} {y} {hp} {hello}\n".encode())
++            self.response_addmon(name, x, y, hello)
++        except Exception as e:
++            print('Smth wrong with this command')
++
++    def response_addmon(self, name, x, y, hello):
++        response = self.s.recv(1024).rstrip().decode()
++        print(f"Added monster {name} to ({x}, {y}) saying {hello}")
++        if response == '1': print("Replaced the old monster")
++
++
++
++
++
++    def do_attack(self, args):
++        try:
++            weapon, name = attack_check(args)
++            self.s.sendall(f"attack {weapon} {name}\n".encode())
++            self.response_attack(name)
++        except Error as e:
++            print(e.text)
++    
++    
++    def do_up(self, args):
++        if len(args) != 0:
++            print(Error(1).text)
++        else:
++            self.s.sendall(f"move 0 -1\n".encode())
++            self.response_move()
++
++    def do_down(self, args):
++        if len(args) != 0:
++            print(Error(1).text)
++        else:
++            self.s.sendall(f"move 0 1\n".encode())
++            self.response_move()
++
++    def do_left(self, args):
++        if len(args) != 0:
++            print(Error(1).text)
++        else:
++            self.s.sendall(f"move -1 0\n".encode())
++            self.response_move()
++
++    def do_right(self, args):
++        if len(args) != 0:
++            print(Error(1).text)
++        else:
++            self.s.sendall(f"move 1 0\n".encode())
++            self.response_move()
++    
++
++    def complete_attack(self, text, line, begidx, endidx):
++        words = (line[:endidx] + ".").split()
++        DICT = []
++        available_monsters = cowsay.list_cows() + ['jgsbat']
++
++        match len(words):
++            case 2: # attack ...
++                DICT = available_monsters
++            case 3: # attack <name> ...
++                DICT = ['with']
++            case 4: # attack <name> with ...
++                DICT = [k for k,v in self.weapons.items()]
++
++        words[-1] = words[-1].replace('.', '')
++        return [c for c in DICT if c.startswith(text)]
++    
++    def do_EOF(self, *args):
++        return 1
++
++if __name__ == '__main__':
++    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
++    client(socket=s).cmdloop()
++
++
+diff --git a/20250317/1/server.py b/20250317/1/server.py
+new file mode 100644
+index 0000000..96cf11f
+--- /dev/null
++++ b/20250317/1/server.py
+@@ -0,0 +1,188 @@
++import cowsay
++import sys
++from io import StringIO
++import shlex
++import readline
++import cmd
++import asyncio
++
++
++
++jgsbat = cowsay.read_dot_cow(StringIO(r"""
++    ,_                    _,
++    ) '-._  ,_    _,  _.-' (
++    )  _.-'.|\\\--//|.'-._  (
++     )'   .'\/o\/o\/'.   `(
++      ) .' . \====/ . '. (
++       )  / <<    >> \  (
++        '-._/``  ``\_.-'
++  jgs     __\\\'--'//__
++         (((""`  `"")))
++"""))
++
++
++class Gamer:
++    def __init__(self, x, y):
++        self.x = x
++        self.y = y
++
++    def move(self, where):
++        if where == 'up':
++            self.y -= 1
++            if self.y < 0:
++                self.y = 9
++
++        if where == 'down':
++            self.y += 1
++            if self.y > 9:
++                self.y = 0
++        
++        if where == 'left':
++            self.x -= 1
++            if self.x < 0:
++                self.x = 9
++        
++        if where == 'right':
++            self.x += 1
++            if self.x > 9:
++                self.x = 0
++        
++        print(f'Moved to ({self.x}, {self.y})')
++
++class Monster:
++    def __init__(self, x, y, hp, name, phrase=''):
++        self.x = x
++        self.y = y
++        self.hp = hp
++        self.phrase = phrase
++        self.name = name
++
++    def say_hi(self):
++        if self.name == 'jgsbat':
++            print(cowsay.cowsay(self.phrase, cowfile=jgsbat))
++        else:
++            print(cowsay.cowsay(self.phrase, cow=self.name))
++
++class MUD(cmd.Cmd):
++    prompt = "Input cmd>> "
++
++    def __init__(self, completekey = "tab", stdin = None, stdout = None):
++        super().__init__(completekey, stdin, stdout)
++        self.pole = [['*' for _ in range(10)] for _ in range(10)]
++        self.monsters_coords = set()
++        self.g = Gamer(0,0)
++        self.weapons = {'sword':10, 'spear':15, 'axe':20}
++
++    def encounter(self, x, y):
++        m = self.pole[y][x]
++        m.say_hi()
++
++    def do_addmon(self, x, y, hp, hello, name):
++        repl = '0'
++        m = Monster(x, y, hp, name, hello)
++        if (m.x,m.y) in self.monsters_coords:
++            repl = '1'
++        self.monsters_coords.add((m.x, m.y))
++        self.pole[m.y][m.x] = m 
++        return repl
++
++    def check_pos(self):
++        if (self.g.x,self.g.y) in self.monsters_coords:
++            self.encounter(self.g.x, self.g.y)
++
++    def do_up(self, s):
++        self.g.move('up')
++        self.check_pos()
++    
++    def do_down(self, s):
++        self.g.move('down')
++        self.check_pos()
++
++    def do_left(self, s):
++        self.g.move('left')
++        self.check_pos()
++
++    def do_right(self, s):
++        self.g.move('right')
++        self.check_pos()
++
++    def do_attack(self, args):
++        if len(args) == 0:
++            print('Invalid input. You should provide at least name of the monster to attack')
++            return
++
++        available_weapons = [k for k,v in self.weapons.items()]
++        weapon = 'sword'
++        args = shlex.split(args)
++        if 'with' in args: # Мы передали на вход какое-то оружие
++            weapon = args[-1]
++        if weapon not in available_weapons:
++            print('Unknown weapon')
++            return
++    
++        x = self.g.x
++        y = self.g.y
++
++        m = self.pole[y][x]
++        if m == '*' or m.name != args[0]: # монстра в принципе нет или нет с таким названием
++            print(f'No {args[0]} here')
++        else:
++            damage = self.weapons[weapon]
++            if m.hp < damage:
++                damage = m.hp
++
++            m.hp -= damage
++            print(f'Attacked {m.name}, damage {damage} hp')
++
++            if m.hp == 0:
++                print(f'{m.name} died')
++                self.pole[y][x] = '*'
++                self.monsters_coords.remove((x, y))
++            else:
++                print(f'{m.name} now has {m.hp}')
++                self.pole[y][x] = m
++
++
++async def echo(reader, writer):
++    me = "{}:{}".format(*writer.get_extra_info('peername'))
++    print(me)
++    game = MUD()
++    player = Gamer(0, 0)
++
++    queue = asyncio.Queue()
++    send = asyncio.create_task(reader.readline())
++    receive = asyncio.create_task(queue.get())
++
++    while not reader.at_eof():
++        done, pending = await asyncio.wait([send, receive], return_when=asyncio.FIRST_COMPLETED)
++        for request in done:
++            if request is send:
++                send = asyncio.create_task(reader.readline())
++                match request.result().decode().split():
++                    case ['addmon', *args]:
++                        name, x, y, hp = args[:4]
++                        hello = ' '.join(args[5:])
++                        writer.write(game.do_addmon(int(x), int(y), int(hp), hello, name).encode())
++                    case ['attack', *args]:
++                        x, y = player.x, player.y
++                        weapon, name = args
++                        writer.write(game.attack(x, y, int(weapon), name).encode())
++                    case ['move', *args]:
++                        d_x, d_y = [int(i) for i in args]
++                        writer.write(game.moving(player, d_x, d_y).encode())
++            if request is receive:
++                receive = asyncio.create_task(my_queue.get())
++
++    send.cancel()
++    receive.cancel()
++    writer.close()
++    await writer.wait_closed()
++
++async def main():
++    server = await asyncio.start_server(echo, '0.0.0.0', 1337)
++    async with server:
++        await server.serve_forever()
++
++asyncio.run(main())
++
++
+-- 
+2.43.0
+

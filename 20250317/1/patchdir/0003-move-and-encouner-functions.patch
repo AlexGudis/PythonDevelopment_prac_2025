@@ -1,0 +1,220 @@
+From ff042b11dda28dd344e5c328dfd51ae1f67348fe Mon Sep 17 00:00:00 2001
+From: AlexGudis <gudis2003@mail.ru>
+Date: Sun, 23 Mar 2025 22:54:45 +0300
+Subject: [PATCH 3/5] move and encouner functions
+
+---
+ 20250317/1/client.py | 86 +++++++++++++++++++++++---------------------
+ 20250317/1/server.py | 58 +++++++++---------------------
+ 2 files changed, 62 insertions(+), 82 deletions(-)
+
+diff --git a/20250317/1/client.py b/20250317/1/client.py
+index cc59b32..7df32e0 100644
+--- a/20250317/1/client.py
++++ b/20250317/1/client.py
+@@ -46,17 +46,6 @@ class client(cmd.Cmd):
+             print(f"{name} died")
+         else:
+             print(f"{name} now has {hp}")
+-    
+-    def response_move(self):
+-        response = self.s.recv(1024).rstrip().decode().split()
+-        print(f"Moved to ({int(response[0])}, {int(response[1])})")
+-        if len(response) > 2:
+-            hello = ' '.join(response[3:])
+-            if response[2] == 'jgsbat':
+-                print(cowsay.cowsay(hello, cowfile=jgsbat))
+-            else:
+-                print(cowsay.cowsay(hello, cow=response[2]))
+-
+ 
+ 
+     def addmon_params_check(self, args):
+@@ -104,45 +93,60 @@ class client(cmd.Cmd):
+ 
+ 
+ 
++    def response_move(self):
++        response = self.s.recv(1024).rstrip().decode().split()
++        print(response)
++        print(f"Moved to ({int(response[0])}, {int(response[1])})")
++        if len(response) > 2:
++            hello = ' '.join(response[3:])
++            if response[2] == 'jgsbat':
++                print(cowsay.cowsay(hello, cowfile=jgsbat))
++            else:
++                print(cowsay.cowsay(hello, cow=response[2]))
+ 
+-    def do_attack(self, args):
+-        try:
+-            weapon, name = attack_check(args)
+-            self.s.sendall(f"attack {weapon} {name}\n".encode())
+-            self.response_attack(name)
+-        except Error as e:
+-            print(e.text)
+-    
+-    
+     def do_up(self, args):
+-        if len(args) != 0:
+-            print(Error(1).text)
+-        else:
+-            self.s.sendall(f"move 0 -1\n".encode())
+-            self.response_move()
++        self.s.sendall(f"move 0 -1\n".encode())
++        self.response_move()
+ 
+     def do_down(self, args):
+-        if len(args) != 0:
+-            print(Error(1).text)
+-        else:
+-            self.s.sendall(f"move 0 1\n".encode())
+-            self.response_move()
++        self.s.sendall(f"move 0 1\n".encode())
++        self.response_move()
+ 
+     def do_left(self, args):
+-        if len(args) != 0:
+-            print(Error(1).text)
+-        else:
+-            self.s.sendall(f"move -1 0\n".encode())
+-            self.response_move()
++        self.s.sendall(f"move -1 0\n".encode())
++        self.response_move()
+ 
+     def do_right(self, args):
+-        if len(args) != 0:
+-            print(Error(1).text)
+-        else:
+-            self.s.sendall(f"move 1 0\n".encode())
+-            self.response_move()
+-    
++        self.s.sendall(f"move 1 0\n".encode())
++        self.response_move()
++
++
++
++
++
++
++
++
++
++
++
++
+ 
++
++
++
++
++
++
++
++    def do_attack(self, args):
++        try:
++            weapon, name = attack_check(args)
++            self.s.sendall(f"attack {weapon} {name}\n".encode())
++            self.response_attack(name)
++        except Error as e:
++            print(e.text)
++    
+     def complete_attack(self, text, line, begidx, endidx):
+         words = (line[:endidx] + ".").split()
+         DICT = []
+diff --git a/20250317/1/server.py b/20250317/1/server.py
+index 96cf11f..b1cbf33 100644
+--- a/20250317/1/server.py
++++ b/20250317/1/server.py
+@@ -26,28 +26,10 @@ class Gamer:
+         self.x = x
+         self.y = y
+ 
+-    def move(self, where):
+-        if where == 'up':
+-            self.y -= 1
+-            if self.y < 0:
+-                self.y = 9
+-
+-        if where == 'down':
+-            self.y += 1
+-            if self.y > 9:
+-                self.y = 0
+-        
+-        if where == 'left':
+-            self.x -= 1
+-            if self.x < 0:
+-                self.x = 9
+-        
+-        if where == 'right':
+-            self.x += 1
+-            if self.x > 9:
+-                self.x = 0
+-        
+-        print(f'Moved to ({self.x}, {self.y})')
++    def move(self, d_x, d_y):
++        self.x = (self.x + d_x) % 10
++        self.y = (self.y + d_y) % 10
++        return f"{self.x} {self.y}"
+ 
+ class Monster:
+     def __init__(self, x, y, hp, name, phrase=''):
+@@ -74,12 +56,21 @@ class MUD(cmd.Cmd):
+         self.weapons = {'sword':10, 'spear':15, 'axe':20}
+ 
+     def encounter(self, x, y):
+-        m = self.pole[y][x]
+-        m.say_hi()
++        if (x,y) in self.monsters_coords:
++            return f' {self.pole[y][x].name} {self.pole[y][x].phrase}'
++        return ''
++
++    def moving(self, player, d_x, d_y):
++        s = player.move(d_x, d_y)
++        if (player.x, player.y) in self.monsters_coords:
++            s += self.encounter(player.x, player.y)
++        print(s)
++        return s
+ 
+     def do_addmon(self, x, y, hp, hello, name):
+         repl = '0'
+         m = Monster(x, y, hp, name, hello)
++        print(f'Created monster with {hello} phrase')
+         if (m.x,m.y) in self.monsters_coords:
+             repl = '1'
+         self.monsters_coords.add((m.x, m.y))
+@@ -90,22 +81,6 @@ class MUD(cmd.Cmd):
+         if (self.g.x,self.g.y) in self.monsters_coords:
+             self.encounter(self.g.x, self.g.y)
+ 
+-    def do_up(self, s):
+-        self.g.move('up')
+-        self.check_pos()
+-    
+-    def do_down(self, s):
+-        self.g.move('down')
+-        self.check_pos()
+-
+-    def do_left(self, s):
+-        self.g.move('left')
+-        self.check_pos()
+-
+-    def do_right(self, s):
+-        self.g.move('right')
+-        self.check_pos()
+-
+     def do_attack(self, args):
+         if len(args) == 0:
+             print('Invalid input. You should provide at least name of the monster to attack')
+@@ -161,7 +136,8 @@ async def echo(reader, writer):
+                 match request.result().decode().split():
+                     case ['addmon', *args]:
+                         name, x, y, hp = args[:4]
+-                        hello = ' '.join(args[5:])
++                        hello = ' '.join(args[4:])
++                        #print(f'Server gets args with addmon command: name = {name}, x = {x}, y = {y}, hp = {hp}, hello = {hello}')
+                         writer.write(game.do_addmon(int(x), int(y), int(hp), hello, name).encode())
+                     case ['attack', *args]:
+                         x, y = player.x, player.y
+-- 
+2.43.0
+

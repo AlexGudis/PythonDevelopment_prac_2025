@@ -1,0 +1,201 @@
+From 0faec4d7aa8ce39036d683765b8110f0b1eb3f94 Mon Sep 17 00:00:00 2001
+From: AlexGudis <gudis2003@mail.ru>
+Date: Sun, 23 Mar 2025 23:33:48 +0300
+Subject: [PATCH 5/5] Clean code, fix some bugs
+
+---
+ 20250317/1/client.py | 47 ++++++++++++++++++++++----------------------
+ 20250317/1/server.py | 40 +++++--------------------------------
+ 2 files changed, 28 insertions(+), 59 deletions(-)
+
+diff --git a/20250317/1/client.py b/20250317/1/client.py
+index be914b9..bbcda4f 100644
+--- a/20250317/1/client.py
++++ b/20250317/1/client.py
+@@ -28,7 +28,7 @@ class client(cmd.Cmd):
+ 
+     readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
+     host = "localhost" if len(sys.argv) < 2 else sys.argv[1]
+-    port = 1337 if len(sys.argv) < 3 else int(sys.argv[2])
++    port = 2228 if len(sys.argv) < 3 else int(sys.argv[2])
+ 
+     def __init__(self, *args, socket, **kwargs):
+         self.s = socket
+@@ -39,7 +39,7 @@ class client(cmd.Cmd):
+     def addmon_params_check(self, args):
+         args = shlex.split(args)
+         args.insert(0, 'addmon')
+-        params = {'name':'default', 'hello':'Uwu', 'hp':-1, 'coords':(0,0)}
++        params = {'name':'default', 'hello':'Uwu', 'hp':1, 'coords':(0,0)}
+         params['name'] = args[args.index('addmon') + 1]
+     
+         try:
+@@ -81,17 +81,6 @@ class client(cmd.Cmd):
+ 
+ 
+ 
+-    def response_move(self):
+-        response = self.s.recv(1024).rstrip().decode().split()
+-        print(response)
+-        print(f"Moved to ({int(response[0])}, {int(response[1])})")
+-        if len(response) > 2:
+-            hello = ' '.join(response[3:])
+-            if response[2] == 'jgsbat':
+-                print(cowsay.cowsay(hello, cowfile=jgsbat))
+-            else:
+-                print(cowsay.cowsay(hello, cow=response[2]))
+-
+     def do_up(self, args):
+         self.s.sendall(f"move 0 -1\n".encode())
+         self.response_move()
+@@ -108,19 +97,17 @@ class client(cmd.Cmd):
+         self.s.sendall(f"move 1 0\n".encode())
+         self.response_move()
+ 
++    def response_move(self):
++        response = self.s.recv(1024).rstrip().decode().split()
++        print(f"Moved to ({int(response[0])}, {int(response[1])})")
++        if len(response) > 2:
++            hello = ' '.join(response[3:])
++            if response[2] == 'jgsbat':
++                print(cowsay.cowsay(hello, cowfile=jgsbat))
++            else:
++                print(cowsay.cowsay(hello, cow=response[2]))
+ 
+ 
+-    def response_attack(self, name):
+-        response = self.s.recv(1024).rstrip().decode()
+-        if response == 'no':
+-            print(f"No {name} here")
+-            return
+-        damage, hp = [int(i) for i in response.split()]
+-        print(f"Attacked {name}, damage {damage} hp")
+-        if hp == 0:
+-            print(f"{name} died")
+-        else:
+-            print(f"{name} now has {hp}")
+ 
+     def do_attack(self, args):
+         if len(args) == 0:
+@@ -138,6 +125,18 @@ class client(cmd.Cmd):
+         
+         self.s.sendall(f"attack {weapon} {args[0]}\n".encode())
+         self.response_attack(args[0])
++
++    def response_attack(self, name):
++        response = self.s.recv(1024).rstrip().decode()
++        if response == 'no':
++            print(f"No {name} here")
++            return
++        damage, hp = [int(i) for i in response.split()]
++        print(f"Attacked {name}, damage {damage} hp")
++        if hp == 0:
++            print(f"{name} died")
++        else:
++            print(f"{name} now has {hp}")
+     
+     def complete_attack(self, text, line, begidx, endidx):
+         words = (line[:endidx] + ".").split()
+diff --git a/20250317/1/server.py b/20250317/1/server.py
+index ea75858..761c024 100644
+--- a/20250317/1/server.py
++++ b/20250317/1/server.py
+@@ -7,20 +7,6 @@ import cmd
+ import asyncio
+ 
+ 
+-
+-jgsbat = cowsay.read_dot_cow(StringIO(r"""
+-    ,_                    _,
+-    ) '-._  ,_    _,  _.-' (
+-    )  _.-'.|\\\--//|.'-._  (
+-     )'   .'\/o\/o\/'.   `(
+-      ) .' . \====/ . '. (
+-       )  / <<    >> \  (
+-        '-._/``  ``\_.-'
+-  jgs     __\\\'--'//__
+-         (((""`  `"")))
+-"""))
+-
+-
+ class Gamer:
+     def __init__(self, x, y):
+         self.x = x
+@@ -39,20 +25,11 @@ class Monster:
+         self.phrase = phrase
+         self.name = name
+ 
+-    def say_hi(self):
+-        if self.name == 'jgsbat':
+-            print(cowsay.cowsay(self.phrase, cowfile=jgsbat))
+-        else:
+-            print(cowsay.cowsay(self.phrase, cow=self.name))
+-
+-class MUD(cmd.Cmd):
+-    prompt = "Input cmd>> "
++class MUD:
+ 
+-    def __init__(self, completekey = "tab", stdin = None, stdout = None):
+-        super().__init__(completekey, stdin, stdout)
++    def __init__(self):
+         self.pole = [['*' for _ in range(10)] for _ in range(10)]
+         self.monsters_coords = set()
+-        self.g = Gamer(0,0)
+         self.weapons = {'sword':10, 'spear':15, 'axe':20}
+ 
+     def encounter(self, x, y):
+@@ -64,23 +41,19 @@ class MUD(cmd.Cmd):
+         s = player.move(d_x, d_y)
+         if (player.x, player.y) in self.monsters_coords:
+             s += self.encounter(player.x, player.y)
+-        print(s)
++        #print(s)
+         return s
+ 
+     def do_addmon(self, x, y, hp, hello, name):
+         repl = '0'
+         m = Monster(x, y, hp, name, hello)
+-        print(f'Created monster with {hello} phrase')
++        #print(f'Created monster with {hello} phrase')
+         if (m.x,m.y) in self.monsters_coords:
+             repl = '1'
+         self.monsters_coords.add((m.x, m.y))
+         self.pole[m.y][m.x] = m 
+         return repl
+ 
+-    def check_pos(self):
+-        if (self.g.x,self.g.y) in self.monsters_coords:
+-            self.encounter(self.g.x, self.g.y)
+-
+     def do_attack(self, x, y, weapon, name):
+ 
+         m = self.pole[y][x]
+@@ -122,7 +95,6 @@ async def echo(reader, writer):
+                     case ['addmon', *args]:
+                         name, x, y, hp = args[:4]
+                         hello = ' '.join(args[4:])
+-                        #print(f'Server gets args with addmon command: name = {name}, x = {x}, y = {y}, hp = {hp}, hello = {hello}')
+                         writer.write(game.do_addmon(int(x), int(y), int(hp), hello, name).encode())
+                     case ['attack', *args]:
+                         x, y = player.x, player.y
+@@ -131,8 +103,6 @@ async def echo(reader, writer):
+                     case ['move', *args]:
+                         d_x, d_y = [int(i) for i in args]
+                         writer.write(game.moving(player, d_x, d_y).encode())
+-            if request is receive:
+-                receive = asyncio.create_task(my_queue.get())
+ 
+     send.cancel()
+     receive.cancel()
+@@ -140,7 +110,7 @@ async def echo(reader, writer):
+     await writer.wait_closed()
+ 
+ async def main():
+-    server = await asyncio.start_server(echo, '0.0.0.0', 1337)
++    server = await asyncio.start_server(echo, '0.0.0.0', 2228)
+     async with server:
+         await server.serve_forever()
+ 
+-- 
+2.43.0
+
