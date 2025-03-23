@@ -28,7 +28,7 @@ class client(cmd.Cmd):
 
     readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
     host = "localhost" if len(sys.argv) < 2 else sys.argv[1]
-    port = 1337 if len(sys.argv) < 3 else int(sys.argv[2])
+    port = 2228 if len(sys.argv) < 3 else int(sys.argv[2])
 
     def __init__(self, *args, socket, **kwargs):
         self.s = socket
@@ -39,7 +39,7 @@ class client(cmd.Cmd):
     def addmon_params_check(self, args):
         args = shlex.split(args)
         args.insert(0, 'addmon')
-        params = {'name':'default', 'hello':'Uwu', 'hp':-1, 'coords':(0,0)}
+        params = {'name':'default', 'hello':'Uwu', 'hp':1, 'coords':(0,0)}
         params['name'] = args[args.index('addmon') + 1]
     
         try:
@@ -81,17 +81,6 @@ class client(cmd.Cmd):
 
 
 
-    def response_move(self):
-        response = self.s.recv(1024).rstrip().decode().split()
-        print(response)
-        print(f"Moved to ({int(response[0])}, {int(response[1])})")
-        if len(response) > 2:
-            hello = ' '.join(response[3:])
-            if response[2] == 'jgsbat':
-                print(cowsay.cowsay(hello, cowfile=jgsbat))
-            else:
-                print(cowsay.cowsay(hello, cow=response[2]))
-
     def do_up(self, args):
         self.s.sendall(f"move 0 -1\n".encode())
         self.response_move()
@@ -108,19 +97,17 @@ class client(cmd.Cmd):
         self.s.sendall(f"move 1 0\n".encode())
         self.response_move()
 
+    def response_move(self):
+        response = self.s.recv(1024).rstrip().decode().split()
+        print(f"Moved to ({int(response[0])}, {int(response[1])})")
+        if len(response) > 2:
+            hello = ' '.join(response[3:])
+            if response[2] == 'jgsbat':
+                print(cowsay.cowsay(hello, cowfile=jgsbat))
+            else:
+                print(cowsay.cowsay(hello, cow=response[2]))
 
 
-    def response_attack(self, name):
-        response = self.s.recv(1024).rstrip().decode()
-        if response == 'no':
-            print(f"No {name} here")
-            return
-        damage, hp = [int(i) for i in response.split()]
-        print(f"Attacked {name}, damage {damage} hp")
-        if hp == 0:
-            print(f"{name} died")
-        else:
-            print(f"{name} now has {hp}")
 
     def do_attack(self, args):
         if len(args) == 0:
@@ -138,6 +125,18 @@ class client(cmd.Cmd):
         
         self.s.sendall(f"attack {weapon} {args[0]}\n".encode())
         self.response_attack(args[0])
+
+    def response_attack(self, name):
+        response = self.s.recv(1024).rstrip().decode()
+        if response == 'no':
+            print(f"No {name} here")
+            return
+        damage, hp = [int(i) for i in response.split()]
+        print(f"Attacked {name}, damage {damage} hp")
+        if hp == 0:
+            print(f"{name} died")
+        else:
+            print(f"{name} now has {hp}")
     
     def complete_attack(self, text, line, begidx, endidx):
         words = (line[:endidx] + ".").split()

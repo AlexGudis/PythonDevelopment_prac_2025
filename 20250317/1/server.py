@@ -7,20 +7,6 @@ import cmd
 import asyncio
 
 
-
-jgsbat = cowsay.read_dot_cow(StringIO(r"""
-    ,_                    _,
-    ) '-._  ,_    _,  _.-' (
-    )  _.-'.|\\\--//|.'-._  (
-     )'   .'\/o\/o\/'.   `(
-      ) .' . \====/ . '. (
-       )  / <<    >> \  (
-        '-._/``  ``\_.-'
-  jgs     __\\\'--'//__
-         (((""`  `"")))
-"""))
-
-
 class Gamer:
     def __init__(self, x, y):
         self.x = x
@@ -39,20 +25,11 @@ class Monster:
         self.phrase = phrase
         self.name = name
 
-    def say_hi(self):
-        if self.name == 'jgsbat':
-            print(cowsay.cowsay(self.phrase, cowfile=jgsbat))
-        else:
-            print(cowsay.cowsay(self.phrase, cow=self.name))
+class MUD:
 
-class MUD(cmd.Cmd):
-    prompt = "Input cmd>> "
-
-    def __init__(self, completekey = "tab", stdin = None, stdout = None):
-        super().__init__(completekey, stdin, stdout)
+    def __init__(self):
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
         self.monsters_coords = set()
-        self.g = Gamer(0,0)
         self.weapons = {'sword':10, 'spear':15, 'axe':20}
 
     def encounter(self, x, y):
@@ -64,22 +41,18 @@ class MUD(cmd.Cmd):
         s = player.move(d_x, d_y)
         if (player.x, player.y) in self.monsters_coords:
             s += self.encounter(player.x, player.y)
-        print(s)
+        #print(s)
         return s
 
     def do_addmon(self, x, y, hp, hello, name):
         repl = '0'
         m = Monster(x, y, hp, name, hello)
-        print(f'Created monster with {hello} phrase')
+        #print(f'Created monster with {hello} phrase')
         if (m.x,m.y) in self.monsters_coords:
             repl = '1'
         self.monsters_coords.add((m.x, m.y))
         self.pole[m.y][m.x] = m 
         return repl
-
-    def check_pos(self):
-        if (self.g.x,self.g.y) in self.monsters_coords:
-            self.encounter(self.g.x, self.g.y)
 
     def do_attack(self, x, y, weapon, name):
 
@@ -122,7 +95,6 @@ async def echo(reader, writer):
                     case ['addmon', *args]:
                         name, x, y, hp = args[:4]
                         hello = ' '.join(args[4:])
-                        #print(f'Server gets args with addmon command: name = {name}, x = {x}, y = {y}, hp = {hp}, hello = {hello}')
                         writer.write(game.do_addmon(int(x), int(y), int(hp), hello, name).encode())
                     case ['attack', *args]:
                         x, y = player.x, player.y
@@ -131,8 +103,6 @@ async def echo(reader, writer):
                     case ['move', *args]:
                         d_x, d_y = [int(i) for i in args]
                         writer.write(game.moving(player, d_x, d_y).encode())
-            if request is receive:
-                receive = asyncio.create_task(my_queue.get())
 
     send.cancel()
     receive.cancel()
@@ -140,7 +110,7 @@ async def echo(reader, writer):
     await writer.wait_closed()
 
 async def main():
-    server = await asyncio.start_server(echo, '0.0.0.0', 1337)
+    server = await asyncio.start_server(echo, '0.0.0.0', 2228)
     async with server:
         await server.serve_forever()
 
