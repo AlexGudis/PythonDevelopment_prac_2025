@@ -99,7 +99,6 @@ class client(cmd.Cmd):
             return
         
         self.s.sendall(f"attack {weapon} {args[0]}\n".encode())
-        self.response_attack(args[0])
     
     def complete_attack(self, text, line, begidx, endidx):
         words = (line[:endidx] + ".").split()

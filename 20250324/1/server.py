@@ -75,23 +75,26 @@ class MUD:
         return mes
 
     def do_attack(self, x, y, weapon, name):
+        mes = ''
         m = self.pole[y][x]
         if m == '*' or m.name != name: # монстра в принципе нет или нет с таким названием
-            return 'no'
+            return f"No {name} here"
         else:
-            damage = self.weapons[weapon]
+            damage = weapon
             if m.hp < damage:
                 damage = m.hp
 
             m.hp -= damage
+            mes += f'Attacked {m.name}, damage {damage} hp'
 
             if m.hp == 0:
                 self.pole[y][x] = '*'
                 self.monsters_coords.remove((x, y))
-                return f'{damage} 0'
+                mes += f'\n{m.name} died'
             else:
                 self.pole[y][x] = m
-                return f'{damage} {m.hp}'
+                mes += f'\n{m.name} now has {m.hp}'
+        return mes
 
 async def send_all(mes, exception=None):
     for out in players.values():
@@ -137,7 +140,7 @@ async def echo(reader, writer):
                     case ['attack', *args]:
                         x, y = players[login].x, players[login].y
                         weapon, name = args
-                        await send_all(f'{login} {game.do_attack(x, y, int(weapon), name)}')
+                        await send_all(f'{login} {game.do_attack(x, y, int(game.weapons[weapon]), name)}')
                     case ['move', *args]:
                         d_x, d_y = [int(i) for i in args]
                         writer.write(game.moving(players[login], d_x, d_y).encode())
