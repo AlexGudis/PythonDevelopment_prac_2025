@@ -7,7 +7,6 @@ import cmd
 import asyncio
 
 
-
 jgsbat = cowsay.read_dot_cow(StringIO(r"""
     ,_                    _,
     ) '-._  ,_    _,  _.-' (
@@ -20,6 +19,7 @@ jgsbat = cowsay.read_dot_cow(StringIO(r"""
          (((""`  `"")))
 """))
 
+
 class Gamer:
     def __init__(self, x, y):
         self.x = x
@@ -31,6 +31,7 @@ class Gamer:
         self.y = (self.y + d_y) % 10
         return f"Moved to ({self.x}, {self.y})"
 
+
 class Monster:
     def __init__(self, x, y, hp, name, phrase=''):
         self.x = x
@@ -38,23 +39,24 @@ class Monster:
         self.hp = hp
         self.phrase = phrase
         self.name = name
-    
+
     def say_hi(self):
         if self.name == 'jgsbat':
             return cowsay.cowsay(self.phrase, cowfile=jgsbat)
         else:
             return cowsay.cowsay(self.phrase, cow=self.name)
 
+
 class MUD:
 
     def __init__(self):
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
         self.monsters_coords = set()
-        self.weapons = {'sword':10, 'spear':15, 'axe':20}
+        self.weapons = {'sword': 10, 'spear': 15, 'axe': 20}
 
     def encounter(self, x, y):
         m = self.pole[y][x]
-        if (x,y) in self.monsters_coords:
+        if (x, y) in self.monsters_coords:
             return m.say_hi()
         return ''
 
@@ -67,17 +69,22 @@ class MUD:
     def do_addmon(self, x, y, hp, hello, name):
         mes = ''
         m = Monster(x, y, hp, name, hello)
-        mes += f'Added monster {m.name} to ({m.x}, {m.y}) saying {m.phrase} with hp={m.hp}'
-        if (m.x,m.y) in self.monsters_coords:
+        mes += f'Added monster {
+            m.name} to ({
+            m.x}, {
+            m.y}) saying {
+                m.phrase} with hp={
+                    m.hp}'
+        if (m.x, m.y) in self.monsters_coords:
             mes += "\nReplaced the old monster"
         self.monsters_coords.add((m.x, m.y))
-        self.pole[m.y][m.x] = m 
+        self.pole[m.y][m.x] = m
         return mes
 
     def do_attack(self, x, y, weapon, name):
         mes = ''
         m = self.pole[y][x]
-        if m == '*' or m.name != name: # монстра в принципе нет или нет с таким названием
+        if m == '*' or m.name != name:  # монстра в принципе нет или нет с таким названием
             return f"No {name} here"
         else:
             damage = weapon
@@ -98,12 +105,13 @@ class MUD:
 
     def generate_sayall(self, args):
         return ' '.join(args)
-    
+
+
 async def send_all(mes, exception=None):
     for out in players.values():
         print(out)
         if out != exception:
-            #print('I have sent smth')
+            # print('I have sent smth')
             await out.queue.put(f"{mes}")
 
 
@@ -121,11 +129,10 @@ async def echo(reader, writer):
         await writer.wait_closed()
         return
     else:
-        players[login] = Gamer(0,0)
+        players[login] = Gamer(0, 0)
         receive = asyncio.create_task(players[login].queue.get())
         writer.write(f"1".encode())
         await send_all(f'New player: {login}', exception=players[login])
-
 
     me = "{}:{}".format(*writer.get_extra_info('peername'))
     print(login, me)
@@ -144,7 +151,11 @@ async def echo(reader, writer):
 
                     case ['move', *args]:
                         d_x, d_y = [int(i) for i in args]
-                        writer.write(game.moving(players[login], d_x, d_y).encode())
+                        writer.write(
+                            game.moving(
+                                players[login],
+                                d_x,
+                                d_y).encode())
 
                     case ['sayall', *args]:
                         print(f'I got {args}')
@@ -168,6 +179,7 @@ async def echo(reader, writer):
     send_all(f"{login} left")
     await writer.wait_closed()
 
+
 async def main():
     global game, players
     game = MUD()
@@ -177,5 +189,3 @@ async def main():
         await server.serve_forever()
 
 asyncio.run(main())
-
-
