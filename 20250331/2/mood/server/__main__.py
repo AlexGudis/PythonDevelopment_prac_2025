@@ -1,9 +1,5 @@
 import cowsay
-import sys
 from io import StringIO
-import shlex
-import readline
-import cmd
 import asyncio
 
 

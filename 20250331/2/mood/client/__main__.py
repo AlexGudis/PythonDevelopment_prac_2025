@@ -66,7 +66,7 @@ class client(cmd.Cmd):
         try:
             x, y, hp, hello, name = self.addmon_params_check(args)
             self.s.sendall(f"addmon {name} {x} {y} {hp} {hello}\n".encode())
-        except Exception as e:
+        except Exception:
             print('Smth wrong with this command')
 
     def do_up(self, args):
