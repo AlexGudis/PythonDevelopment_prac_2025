@@ -116,6 +116,15 @@ class client(cmd.Cmd):
         words[-1] = words[-1].replace('.', '')
         return [c for c in DICT if c.startswith(text)]
     
+
+    def do_sayall(self, args):
+        if len(args) == 0:
+            print("You should input your message to others")
+            return 
+
+        self.s.sendall(f"sayall {' '.join(shlex.split(args))}\n".encode())
+
+    
     def do_EOF(self, *args):
         return 1
 

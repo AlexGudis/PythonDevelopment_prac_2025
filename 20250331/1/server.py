@@ -96,10 +96,14 @@ class MUD:
                 mes += f'\n{m.name} now has {m.hp}'
         return mes
 
+    def generate_sayall(self, args):
+        return ' '.join(args)
+    
 async def send_all(mes, exception=None):
     for out in players.values():
+        print(out)
         if out != exception:
-            print('I have sent smth')
+            #print('I have sent smth')
             await out.queue.put(f"{mes}")
 
 
@@ -141,7 +145,11 @@ async def echo(reader, writer):
                     case ['move', *args]:
                         d_x, d_y = [int(i) for i in args]
                         writer.write(game.moving(players[login], d_x, d_y).encode())
-                        
+
+                    case ['sayall', *args]:
+                        print(f'I got {args}')
+                        await send_all(f'{login}: {game.generate_sayall(args)}', exception=players[login])
+
                     case ['attack', *args]:
                         x, y = players[login].x, players[login].y
                         weapon, name = args
