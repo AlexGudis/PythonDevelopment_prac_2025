@@ -19,6 +19,7 @@ jgsbat = cowsay.read_dot_cow(StringIO(r"""
 
 
 class Gamer:
+    """Class"""
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -31,6 +32,7 @@ class Gamer:
 
 
 class Monster:
+    """Class"""
     def __init__(self, x, y, hp, name, phrase=''):
         self.x = x
         self.y = y
@@ -46,6 +48,7 @@ class Monster:
 
 
 class MUD:
+    """Game class"""
 
     def __init__(self):
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
@@ -114,6 +117,7 @@ async def send_all(mes, exception=None):
 
 
 async def echo(reader, writer):
+    """Main loop"""
     global game, players
 
     send = asyncio.create_task(reader.readline())
@@ -181,15 +185,18 @@ async def echo(reader, writer):
 
 
 async def monster_go():
+    """Ramdom m move"""
     cnt = 0
     move_to = {'right':(1, 0), 'left':(-1, 0), 'up': (0, -1), 'down': (0, 1)}
     # left, right, up, down
     while True:
         cnt += 1
-        await asyncio.sleep(15)
-        await send_all(f'BOOOO{cnt}')
+        await asyncio.sleep(30)
+        #await send_all(f'BOOOO{cnt}')
         if game.monsters_coords:
             not_done = True
+            random_m_x = -1
+            random_m_y = -1
             while not_done:
                 random_m_x, random_m_y = random.choice(list(game.monsters_coords))
                 random_monstr = game.pole[random_m_y][random_m_x]
@@ -204,24 +211,22 @@ async def monster_go():
                     game.monsters_coords.remove((random_m_x, random_m_y))
                     random_m_x += dx
                     random_m_y += dy
-                    random_monstr.x = random_m_x
-                    random_monstr.y = random_m_y
+                    random_monstr.x = random_m_x % 10
+                    random_monstr.y = random_m_y % 10
                     game.pole[random_m_y][random_m_x] = random_monstr
                     not_done = False
                     game.monsters_coords.add((random_m_x, random_m_y))
                     await send_all(f'{random_monstr.name} moved one cell {direction}')
-                    await send_all(f'{random_monstr.name} new coords is {random_m_x, random_m_y}')
+                    await send_all(f'{random_monstr.name} new coords is {random_monstr.x, random_monstr.y}')
 
-
-                    
-
-            
-            
-
+            for p in players.values():
+                if (p.x, p.y) == (random_m_x, random_m_y):
+                    await p.queue.put(f"{game.encounter(random_m_x, random_m_y)}")
 
         
 
 async def main():
+    """Run it"""
     global game, players
     game = MUD()
     players = {}

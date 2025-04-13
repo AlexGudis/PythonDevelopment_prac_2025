@@ -1,3 +1,5 @@
+"""Client"""
+
 import cowsay
 import sys
 from io import StringIO
