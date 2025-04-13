@@ -1,6 +1,8 @@
 import cowsay
 from io import StringIO
 import asyncio
+import time
+import random
 
 
 jgsbat = cowsay.read_dot_cow(StringIO(r"""
@@ -135,6 +137,7 @@ async def echo(reader, writer):
 
     while not reader.at_eof():
         done, pending = await asyncio.wait([send, receive], return_when=asyncio.FIRST_COMPLETED)
+        print('Pipi papa popo')
         for request in done:
             if request is send:
                 send = asyncio.create_task(reader.readline())
@@ -176,11 +179,54 @@ async def echo(reader, writer):
     await writer.wait_closed()
 
 
+
+async def monster_go():
+    cnt = 0
+    move_to = {'right':(1, 0), 'left':(-1, 0), 'up': (0, -1), 'down': (0, 1)}
+    # left, right, up, down
+    while True:
+        cnt += 1
+        await asyncio.sleep(15)
+        await send_all(f'BOOOO{cnt}')
+        if game.monsters_coords:
+            not_done = True
+            while not_done:
+                random_m_x, random_m_y = random.choice(list(game.monsters_coords))
+                random_monstr = game.pole[random_m_y][random_m_x]
+                print(random_monstr.say_hi())
+
+                direction = random.choice(list(move_to.keys()))
+                dx = move_to[direction][0]
+                dy = move_to[direction][1]
+
+                if (random_m_x + dx, random_m_y + dy) not in game.monsters_coords:
+                    game.pole[random_m_y][random_m_x] = '*'
+                    game.monsters_coords.remove((random_m_x, random_m_y))
+                    random_m_x += dx
+                    random_m_y += dy
+                    random_monstr.x = random_m_x
+                    random_monstr.y = random_m_y
+                    game.pole[random_m_y][random_m_x] = random_monstr
+                    not_done = False
+                    game.monsters_coords.add((random_m_x, random_m_y))
+                    await send_all(f'{random_monstr.name} moved one cell {direction}')
+                    await send_all(f'{random_monstr.name} new coords is {random_m_x, random_m_y}')
+
+
+                    
+
+            
+            
+
+
+        
+
 async def main():
     global game, players
     game = MUD()
     players = {}
     server = await asyncio.start_server(echo, '0.0.0.0', 1337)
+    asyncio.create_task(monster_go())
     async with server:
         await server.serve_forever()
 
