@@ -1,3 +1,6 @@
+"""Docs"""
+
+
 import cowsay
 import asyncio
 import time
@@ -8,20 +11,63 @@ from ..common import jgsbat
 
 
 class Gamer:
-    """Class"""
+
+    """Represents a player in the MUD game.
+    
+    Attributes:
+        x (int): Current X-coordinate on the game field (0-9).
+        y (int): Current Y-coordinate on the game field (0-9).
+        queue (asyncio.Queue): Message queue for asynchronous communication.
+    """
+
     def __init__(self, x, y):
+
+        """Initialize the player with starting coordinates.
+        Default position is (0,0) for each palyer
+        
+        Args:
+            x: Initial X position (0-9).
+            y: Initial Y position (0-9).
+        """
+
         self.x = x
         self.y = y
         self.queue = asyncio.Queue()
 
     def move(self, d_x, d_y):
+
+        """Move the player by specified deltas with wrap-around.
+        
+        Args:
+            d_x: Movement delta on X-axis (+/- 1).
+            d_y: Movement delta on Y-axis (+/- 1).
+            Depends on the specific move commands. See client docs
+            
+        Returns:
+            String confirmation with new coordinates of the player.
+            
+        Example:
+            >>> right
+            'Moved to (1, 0)'
+        """
+
         self.x = (self.x + d_x) % 10
         self.y = (self.y + d_y) % 10
         return f"Moved to ({self.x}, {self.y})"
 
 
 class Monster:
-    """Class"""
+    
+    """Represents a game monster with interactive abilities.
+    
+    Attributes:
+        x (int): X-coordinate on the game field.
+        y (int): Y-coordinate on the game field.
+        hp (int): Hit points of the monster.
+        name (str): Unique identifier (e.g. 'dragon', 'jgsbat').
+        phrase (str): Greeting message when encountered.
+    """
+
     def __init__(self, x, y, hp, name, phrase=''):
         self.x = x
         self.y = y
@@ -223,4 +269,6 @@ async def main():
     async with server:
         await server.serve_forever()
 
-asyncio.run(main())
+
+if __name__ == "__main__":
+    asyncio.run(main())

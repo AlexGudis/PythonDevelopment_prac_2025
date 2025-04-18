@@ -1,3 +1,2 @@
 """Init for server."""
-
-from .__main__ import *
+from .__main__ import Gamer, Monster, MUD
