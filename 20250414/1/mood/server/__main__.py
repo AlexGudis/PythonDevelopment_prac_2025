@@ -1,21 +1,10 @@
 import cowsay
-from io import StringIO
 import asyncio
 import time
 import random
+from ..common import jgsbat
 
 
-jgsbat = cowsay.read_dot_cow(StringIO(r"""
-    ,_                    _,
-    ) '-._  ,_    _,  _.-' (
-    )  _.-'.|\\\--//|.'-._  (
-     )'   .'\/o\/o\/'.   `(
-      ) .' . \====/ . '. (
-       )  / <<    >> \  (
-        '-._/``  ``\_.-'
-  jgs     __\\\'--'//__
-         (((""`  `"")))
-"""))
 
 
 class Gamer:
@@ -192,7 +181,6 @@ async def monster_go():
     while True:
         cnt += 1
         await asyncio.sleep(30)
-        #await send_all(f'BOOOO{cnt}')
         if game.monsters_coords:
             not_done = True
             random_m_x = -1
@@ -206,16 +194,16 @@ async def monster_go():
                 dx = move_to[direction][0]
                 dy = move_to[direction][1]
 
-                if (random_m_x + dx, random_m_y + dy) not in game.monsters_coords:
+                if ( (random_m_x + dx) % 10, (random_m_y + dy) % 10) not in game.monsters_coords:
                     game.pole[random_m_y][random_m_x] = '*'
                     game.monsters_coords.remove((random_m_x, random_m_y))
                     random_m_x += dx
                     random_m_y += dy
                     random_monstr.x = random_m_x % 10
                     random_monstr.y = random_m_y % 10
-                    game.pole[random_m_y][random_m_x] = random_monstr
+                    game.pole[random_monstr.y][random_monstr.x] = random_monstr
                     not_done = False
-                    game.monsters_coords.add((random_m_x, random_m_y))
+                    game.monsters_coords.add((random_monstr.x, random_monstr.y))
                     await send_all(f'{random_monstr.name} moved one cell {direction}')
                     await send_all(f'{random_monstr.name} new coords is {random_monstr.x, random_monstr.y}')
 

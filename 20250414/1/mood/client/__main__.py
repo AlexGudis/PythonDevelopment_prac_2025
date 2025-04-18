@@ -2,7 +2,6 @@
 
 import cowsay
 import sys
-from io import StringIO
 import shlex
 import readline
 import cmd
@@ -10,17 +9,7 @@ import socket
 import threading
 
 
-jgsbat = cowsay.read_dot_cow(StringIO(r"""
-    ,_                    _,
-    ) '-._  ,_    _,  _.-' (
-    )  _.-'.|\\\--//|.'-._  (
-     )'   .'\/o\/o\/'.   `(
-      ) .' . \====/ . '. (
-       )  / <<    >> \  (
-        '-._/``  ``\_.-'
-  jgs     __\\\'--'//__
-         (((""`  `"")))
-"""))
+from ..common import jgsbat
 
 
 class client(cmd.Cmd):
@@ -112,6 +101,19 @@ class client(cmd.Cmd):
                 DICT = ['with']
             case 4:  # attack <name> with ...
                 DICT = ['sword', 'spear', 'axe']
+
+        words[-1] = words[-1].replace('.', '')
+        return [c for c in DICT if c.startswith(text)]
+    
+
+    def complete_addmon(self, text, line, begidx, endidx):
+        words = (line[:endidx] + ".").split()
+        DICT = []
+        available_monsters = cowsay.list_cows() + ['jgsbat']
+
+        match len(words):
+            case 2:  # attack ...
+                DICT = available_monsters
 
         words[-1] = words[-1].replace('.', '')
         return [c for c in DICT if c.startswith(text)]
