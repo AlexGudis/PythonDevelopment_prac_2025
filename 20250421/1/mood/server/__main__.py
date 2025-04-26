@@ -1,4 +1,20 @@
-"""Docs"""
+"""
+Multi User Dungeon (MUD) Game Server
+------------------------------------
+A multiplayer game where players can move around a grid, encounter monsters, cooperate, and interact with them.
+
+Modules used:
+- `cowsay`: For fancy monster greetings.
+- `asyncio`: Asynchronous event-driven communication between server and players.
+- `random`, `time`: For random monster behavior and timing.
+- `common.jgsbat`: Custom cowsay figure for the monster 'jgsbat'.
+
+Project Components:
+- `Gamer`: Player model.
+- `Monster`: Monster model.
+- `MUD`: Game field and logic manager.
+- Asynchronous server functions for player interaction and monster actions.
+"""
 
 
 import cowsay
@@ -8,6 +24,10 @@ import random
 from ..common import jgsbat
 
 
+
+# ================================
+# Player Class
+# ================================
 
 
 class Gamer:
@@ -56,6 +76,10 @@ class Gamer:
         return f"Moved to ({self.x}, {self.y})"
 
 
+# ================================
+# Monster Class
+# ================================
+
 class Monster:
     
     """Represents a game monster with interactive abilities.
@@ -76,33 +100,89 @@ class Monster:
         self.name = name
 
     def say_hi(self):
+
+        """
+        Return a cowsay greeting from the monster.
+
+        Returns:
+            str: Monster's greeting as ASCII art.
+        """
+
         if self.name == 'jgsbat':
             return cowsay.cowsay(self.phrase, cowfile=jgsbat)
         else:
             return cowsay.cowsay(self.phrase, cow=self.name)
 
 
+
+# ================================
+# MUD Game Class
+# ================================
+
 class MUD:
-    """Game class"""
+    """
+    Core game logic handler.
+    """
 
     def __init__(self):
+        """
+        Initialize the game field, monster tracking, and weapon data.
+        """
+
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
         self.monsters_coords = set()
         self.weapons = {'sword': 10, 'spear': 15, 'axe': 20}
 
     def encounter(self, x, y):
+        """
+        Check if a player encounters a monster.
+
+        Args:
+            x (int): X-coordinate.
+            y (int): Y-coordinate.
+
+        Returns:
+            str: Monster greeting or empty string if no monster found here.
+        """
+
         m = self.pole[y][x]
         if (x, y) in self.monsters_coords:
             return m.say_hi()
         return ''
 
     def moving(self, player, d_x, d_y):
+        """
+        Move a player and handle encounters.
+
+        Args:
+            player (Gamer): The player object.
+            d_x (int): Delta X movement.
+            d_y (int): Delta Y movement.
+
+        Returns:
+            str: Move result and potential encounter message.
+        """
+
         s = player.move(d_x, d_y)
         if (player.x, player.y) in self.monsters_coords:
             s += self.encounter(player.x, player.y)
         return s
 
     def do_addmon(self, x, y, hp, hello, name):
+        """
+        Add or replace a monster at a given position.
+
+        Args:
+            x (int): X-coordinate.
+            y (int): Y-coordinate.
+            hp (int): Monster's HP.
+            hello (str): Monster's greeting.
+            name (str): Monster type.
+
+        Returns:
+            str: Result message.
+        """
+
         mes = ''
         m = Monster(x, y, hp, name, hello)
         mes += f'Added monster {
@@ -118,6 +198,19 @@ class MUD:
         return mes
 
     def do_attack(self, x, y, weapon, name):
+        """
+        Handle an attack action from a player.
+
+        Args:
+            x (int): Player's X-coordinate.
+            y (int): Player's Y-coordinate.
+            weapon_damage (int): Weapon's damage points.
+            name (str): Name of the targeted monster.
+
+        Returns:
+            str: Result of the attack.
+        """
+
         mes = ''
         m = self.pole[y][x]
         if m == '*' or m.name != name:  # монстра в принципе нет или нет с таким названием
@@ -140,10 +233,32 @@ class MUD:
         return mes
 
     def generate_sayall(self, args):
+        """
+        Generate a broadcast message from a player.
+
+        Args:
+            args (list): List of words.
+
+        Returns:
+            str: Combined message string.
+        """
+
         return ' '.join(args)
 
 
+# ================================
+# Async Functions
+# ================================
+
 async def send_all(mes, exception=None):
+    """
+    Send a message to all players except optionally one.
+
+    Args:
+        message (str): The message to send.
+        exception (Gamer, optional): Player to exclude.
+    """
+
     for out in players.values():
         print(out)
         if out != exception:
@@ -152,7 +267,14 @@ async def send_all(mes, exception=None):
 
 
 async def echo(reader, writer):
-    """Main loop"""
+    """
+    Main player communication loop.
+
+    Args:
+        reader (asyncio.StreamReader): Player input stream.
+        writer (asyncio.StreamWriter): Player output stream.
+    """
+
     global game, players
 
     send = asyncio.create_task(reader.readline())
@@ -220,7 +342,10 @@ async def echo(reader, writer):
 
 
 async def monster_go():
-    """Ramdom m move"""
+    """
+    Periodically move monsters randomly.
+    """
+
     cnt = 0
     move_to = {'right':(1, 0), 'left':(-1, 0), 'up': (0, -1), 'down': (0, 1)}
     # left, right, up, down
@@ -260,7 +385,11 @@ async def monster_go():
         
 
 async def main():
-    """Run it"""
+    """
+    Entry point to start the game server.
+    """
+
+    
     global game, players
     game = MUD()
     players = {}
