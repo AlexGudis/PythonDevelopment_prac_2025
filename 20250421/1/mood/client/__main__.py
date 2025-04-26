@@ -72,6 +72,14 @@ class client(cmd.Cmd):
     def do_right(self, args):
         self.s.sendall(f"move 1 0\n".encode())
 
+    def do_movemonsters(self, args):
+        #print(f'ARGS = {args}')
+        if args in ['on', 'off']:
+            self.s.sendall(f"movemonsters {args}\n".encode())
+        else:
+            print('Incorrect mode')
+            return
+        
     def do_attack(self, args):
         if len(args) == 0:
             print(
@@ -186,9 +194,9 @@ if __name__ == '__main__':
                     print(f"Executing: {line}")
                     cmdline.onecmd(line)
                     time.sleep(1)
-            #cmdline.do_EOF()
-            print("All commands from file are done. You can continue manually or log out")
-            cmdline.cmdloop()
+            cmdline.do_EOF()
+            print("All commands from file are done. Logout")
+            #cmdline.cmdloop()
         else:
             cmdline.cmdloop()
 

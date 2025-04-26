@@ -23,6 +23,8 @@ import time
 import random
 from ..common import jgsbat
 
+movemonsters = True
+
 
 
 # ================================
@@ -244,6 +246,16 @@ class MUD:
         """
 
         return ' '.join(args)
+    
+    def do_movemonsters(self, args):
+        global movemonsters
+
+        if args == 'on':
+            movemonsters = True
+            return 'Moving monsters: on'
+        else:
+            movemonsters = False
+            return 'Moving monsters: off'
 
 
 # ================================
@@ -326,6 +338,10 @@ async def echo(reader, writer):
                         x, y = players[login].x, players[login].y
                         weapon, name = args
                         await send_all(f'{login} {game.do_attack(x, y, int(game.weapons[weapon]), name)}')
+                    
+                    case ['movemonsters', type]:
+                        #print('WANT TO', type)
+                        await send_all(f'{game.do_movemonsters(type)}')
 
             if request is receive:
                 receive = asyncio.create_task(players[login].queue.get())
@@ -353,7 +369,7 @@ async def monster_go():
     while True:
         cnt += 1
         await asyncio.sleep(30)
-        if game.monsters_coords:
+        if game.monsters_coords and movemonsters:
             not_done = True
             random_m_x = -1
             random_m_y = -1
