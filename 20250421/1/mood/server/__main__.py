@@ -281,6 +281,8 @@ async def echo(reader, writer):
 
     await asyncio.wait_for(send, timeout=None)
     login = send.result().decode()[:-1]
+
+    # Check if player is really a new one
     if login in players:
         writer.write('0'.encode())
         writer.close()
@@ -298,7 +300,6 @@ async def echo(reader, writer):
 
     while not reader.at_eof():
         done, pending = await asyncio.wait([send, receive], return_when=asyncio.FIRST_COMPLETED)
-        print('Pipi papa popo')
         for request in done:
             if request is send:
                 send = asyncio.create_task(reader.readline())
