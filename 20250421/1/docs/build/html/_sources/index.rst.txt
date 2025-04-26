@@ -6,17 +6,23 @@
 My MUD documentation
 =================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+**Формулировка задачи:**
 
+- Для модуля-сервера задокументировать все функции, классы и модуль в формате autodoc.
+- Добиться выгонки технической документации по этим классам/функциям/модулю.
+- Следить за тем, чтобы генераты (html-документация) не хранились в git (.gitignore), а настройки Sphinx — хранились.
+- Оформить титульный лист документации (как минимум, скопировать туда формулировку задачи).
+- Сделать в титульном листе ссылку на техническую документацию.
+
+
+**Перейти к технической документации:**
+
+- :doc:`Server Module Documentation <mood_server>`
+- :doc:`Client Module Documentation <mood_client>`
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
-
-   mood_server
-   mood_client
+   :caption:
 
 .. image:: /_static/Saturno_Saturnita.png
    :width: 400px

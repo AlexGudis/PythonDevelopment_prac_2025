@@ -1,37 +1,88 @@
+
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mood.server.__main__ &mdash; MUD  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
-<html lang="en" data-content_root="../../../">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mood.server.__main__ &#8212; MUD  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
-    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
-   
-  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-  
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
 
-  
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MUD
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
 
-          <div class="body" role="main">
-            
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MUD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mood.server.__main__</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <h1>Source code for mood.server.__main__</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Docs&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Multi User Dungeon (MUD) Game Server</span>
+<span class="sd">------------------------------------</span>
+<span class="sd">A multiplayer game where players can move around a grid, encounter monsters, cooperate, and interact with them.</span>
+
+<span class="sd">Modules used:</span>
+<span class="sd">- `cowsay`: For fancy monster greetings.</span>
+<span class="sd">- `asyncio`: Asynchronous event-driven communication between server and players.</span>
+<span class="sd">- `random`, `time`: For random monster behavior and timing.</span>
+<span class="sd">- `common.jgsbat`: Custom cowsay figure for the monster &#39;jgsbat&#39;.</span>
+
+<span class="sd">Project Components:</span>
+<span class="sd">- `Gamer`: Player model.</span>
+<span class="sd">- `Monster`: Monster model.</span>
+<span class="sd">- `MUD`: Game field and logic manager.</span>
+<span class="sd">- Asynchronous server functions for player interaction and monster actions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">cowsay</span>
@@ -42,14 +93,35 @@
 
 
 
+<span class="c1"># ================================</span>
+<span class="c1"># Player Class</span>
+<span class="c1"># ================================</span>
+
 
 <div class="viewcode-block" id="Gamer">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.Gamer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Gamer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a player in the MUD game.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        x (int): Current X-coordinate on the game field (0-9).</span>
+<span class="sd">        y (int): Current Y-coordinate on the game field (0-9).</span>
+<span class="sd">        queue (asyncio.Queue): Message queue for asynchronous communication.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Gamer.__init__">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.Gamer.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the player with starting coordinates.</span>
+<span class="sd">        Default position is (0,0) for each palyer</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            x: Initial X position (0-9).</span>
+<span class="sd">            y: Initial Y position (0-9).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span></div>
@@ -58,6 +130,22 @@
 <div class="viewcode-block" id="Gamer.move">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.Gamer.move">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_x</span><span class="p">,</span> <span class="n">d_y</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Move the player by specified deltas with wrap-around.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            d_x: Movement delta on X-axis (+/- 1).</span>
+<span class="sd">            d_y: Movement delta on Y-axis (+/- 1).</span>
+<span class="sd">            Depends on the specific move commands. See client docs</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            String confirmation with new coordinates of the player.</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; right</span>
+<span class="sd">            &#39;Moved to (1, 0)&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">d_x</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">d_y</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Moved to (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)&quot;</span></div>
@@ -65,10 +153,24 @@
 
 
 
+<span class="c1"># ================================</span>
+<span class="c1"># Monster Class</span>
+<span class="c1"># ================================</span>
+
 <div class="viewcode-block" id="Monster">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.Monster">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Monster</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class&quot;&quot;&quot;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a game monster with interactive abilities.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        x (int): X-coordinate on the game field.</span>
+<span class="sd">        y (int): Y-coordinate on the game field.</span>
+<span class="sd">        hp (int): Hit points of the monster.</span>
+<span class="sd">        name (str): Unique identifier (e.g. &#39;dragon&#39;, &#39;jgsbat&#39;).</span>
+<span class="sd">        phrase (str): Greeting message when encountered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Monster.__init__">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.Monster.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">phrase</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
@@ -82,6 +184,14 @@
 <div class="viewcode-block" id="Monster.say_hi">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.Monster.say_hi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">say_hi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a cowsay greeting from the monster.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Monster&#39;s greeting as ASCII art.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;jgsbat&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">cowsay</span><span class="o">.</span><span class="n">cowsay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phrase</span><span class="p">,</span> <span class="n">cowfile</span><span class="o">=</span><span class="n">jgsbat</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -90,14 +200,25 @@
 
 
 
+
+<span class="c1"># ================================</span>
+<span class="c1"># MUD Game Class</span>
+<span class="c1"># ================================</span>
+
 <div class="viewcode-block" id="MUD">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MUD</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Game class&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Core game logic handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="MUD.__init__">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the game field, monster tracking, and weapon data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">pole</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;*&#39;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">monsters_coords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weapons</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sword&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;spear&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;axe&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span></div>
@@ -106,6 +227,17 @@
 <div class="viewcode-block" id="MUD.encounter">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD.encounter">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">encounter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a player encounters a monster.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): X-coordinate.</span>
+<span class="sd">            y (int): Y-coordinate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Monster greeting or empty string if no monster found here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pole</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">monsters_coords</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">say_hi</span><span class="p">()</span>
@@ -115,6 +247,18 @@
 <div class="viewcode-block" id="MUD.moving">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD.moving">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">d_x</span><span class="p">,</span> <span class="n">d_y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move a player and handle encounters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            player (Gamer): The player object.</span>
+<span class="sd">            d_x (int): Delta X movement.</span>
+<span class="sd">            d_y (int): Delta Y movement.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Move result and potential encounter message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">s</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">d_x</span><span class="p">,</span> <span class="n">d_y</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">monsters_coords</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encounter</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -124,6 +268,20 @@
 <div class="viewcode-block" id="MUD.do_addmon">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD.do_addmon">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_addmon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">hello</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add or replace a monster at a given position.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): X-coordinate.</span>
+<span class="sd">            y (int): Y-coordinate.</span>
+<span class="sd">            hp (int): Monster&#39;s HP.</span>
+<span class="sd">            hello (str): Monster&#39;s greeting.</span>
+<span class="sd">            name (str): Monster type.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Result message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">mes</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">Monster</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">hello</span><span class="p">)</span>
         <span class="n">mes</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;Added monster </span><span class="si">{</span>
@@ -142,6 +300,19 @@
 <div class="viewcode-block" id="MUD.do_attack">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD.do_attack">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_attack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weapon</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle an attack action from a player.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): Player&#39;s X-coordinate.</span>
+<span class="sd">            y (int): Player&#39;s Y-coordinate.</span>
+<span class="sd">            weapon_damage (int): Weapon&#39;s damage points.</span>
+<span class="sd">            name (str): Name of the targeted monster.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Result of the attack.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">mes</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pole</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span> <span class="ow">or</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>  <span class="c1"># монстра в принципе нет или нет с таким названием</span>
@@ -167,14 +338,36 @@
 <div class="viewcode-block" id="MUD.generate_sayall">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.MUD.generate_sayall">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_sayall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a broadcast message from a player.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            args (list): List of words.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Combined message string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
 </div>
 
 
 
+<span class="c1"># ================================</span>
+<span class="c1"># Async Functions</span>
+<span class="c1"># ================================</span>
+
 <div class="viewcode-block" id="send_all">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.send_all">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_all</span><span class="p">(</span><span class="n">mes</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Send a message to all players except optionally one.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        message (str): The message to send.</span>
+<span class="sd">        exception (Gamer, optional): Player to exclude.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">out</span> <span class="o">!=</span> <span class="n">exception</span><span class="p">:</span>
@@ -186,7 +379,14 @@
 <div class="viewcode-block" id="echo">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.echo">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">echo</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main loop&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main player communication loop.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        reader (asyncio.StreamReader): Player input stream.</span>
+<span class="sd">        writer (asyncio.StreamWriter): Player output stream.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">global</span> <span class="n">game</span><span class="p">,</span> <span class="n">players</span>
 
     <span class="n">send</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
@@ -257,7 +457,10 @@
 <div class="viewcode-block" id="monster_go">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.monster_go">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">monster_go</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ramdom m move&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Periodically move monsters randomly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">move_to</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;right&#39;</span><span class="p">:(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;left&#39;</span><span class="p">:(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span>
     <span class="c1"># left, right, up, down</span>
@@ -300,7 +503,11 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../mood_server.html#mood.server.__main__.main">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run it&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Entry point to start the game server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
     <span class="k">global</span> <span class="n">game</span><span class="p">,</span> <span class="n">players</span>
     <span class="n">game</span> <span class="o">=</span> <span class="n">MUD</span><span class="p">()</span>
     <span class="n">players</span> <span class="o">=</span> <span class="p">{}</span>
@@ -315,69 +522,31 @@
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 
+           </div>
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Alex_Gudis.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">MUD</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-
-<search id="searchbox" style="display: none" role="search">
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../mood_server.html">Server Module Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../mood_client.html">Client Module Documentation</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &#169;2025, Alex_Gudis.
-      
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>
