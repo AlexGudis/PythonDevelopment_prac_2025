@@ -1,0 +1,113 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-05-09 11:40+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: server/__main__.py:83
+#, python-brace-format
+msgid "Set up locale: {args}"
+msgstr ""
+
+#: server/__main__.py:107
+#, python-brace-format
+msgid "Moved to ({x}, {y})\n"
+msgstr ""
+
+#: server/__main__.py:294
+msgid "Moving monsters: on"
+msgstr ""
+
+#: server/__main__.py:297
+msgid "Moving monsters: off"
+msgstr ""
+
+#: server/__main__.py:303
+msgid "Replaced the old monster\n"
+msgstr ""
+
+#: server/__main__.py:304
+#, python-brace-format
+msgid ""
+"Added monster {name} to ({x}, {y}) saying {hello}\n"
+"{replaced}"
+msgstr ""
+
+#: server/__main__.py:310
+#, python-brace-format
+msgid "{name} died\n"
+msgstr ""
+
+#: server/__main__.py:312
+#, python-brace-format
+msgid "{name} now has"
+msgstr ""
+
+#: server/__main__.py:313
+#, python-brace-format
+msgid " {hp} hit point\n"
+msgid_plural " {hp} hit points\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: server/__main__.py:314
+#, python-brace-format
+msgid "{login} attacked {name}"
+msgstr ""
+
+#: server/__main__.py:315
+#, python-brace-format
+msgid ", damage {damage} hit point\n"
+msgid_plural ", damage {damage} hit points\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: server/__main__.py:318
+#, python-brace-format
+msgid "New player: {login}"
+msgstr ""
+
+#: server/__main__.py:320
+#, python-brace-format
+msgid "{login} left"
+msgstr ""
+
+#: server/__main__.py:438
+msgid "right"
+msgstr ""
+
+#: server/__main__.py:438
+msgid "left"
+msgstr ""
+
+#: server/__main__.py:438
+msgid "up"
+msgstr ""
+
+#: server/__main__.py:438
+msgid "down"
+msgstr ""
+
+#: server/__main__.py:494
+#, python-brace-format
+msgid "{name} moved one cell {direction}"
+msgstr ""
+
+#: server/__main__.py:497
+#, python-brace-format
+msgid "{name} new coords is {x}, {y}"
+msgstr ""
+

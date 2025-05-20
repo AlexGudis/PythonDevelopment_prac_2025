@@ -1,0 +1,77 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-05-08 12:58+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: __main__.py:79
+msgid "Set up locale: {args}"
+msgstr ""
+
+#: __main__.py:101
+msgid "Moved to ({x}, {y})\n"
+msgstr ""
+
+#: __main__.py:278
+msgid "Moving monsters: on"
+msgstr ""
+
+#: __main__.py:281
+msgid "Moving monsters: off"
+msgstr ""
+
+#: __main__.py:287
+msgid "Replaced the old monster\n"
+msgstr ""
+
+#: __main__.py:288
+msgid ""
+"Added monster {name} to ({x}, {y}) saying {hello}\n"
+"{replaced}"
+msgstr ""
+
+#: __main__.py:294
+msgid "{name} died\n"
+msgstr ""
+
+#: __main__.py:296
+msgid "{name} now has"
+msgstr ""
+
+#: __main__.py:297
+msgid " {hp} hit point\n"
+msgid_plural " {hp} hit points\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: __main__.py:298
+msgid "{login} attacked {name}"
+msgstr ""
+
+#: __main__.py:299
+msgid ", damage {damage} hit point\n"
+msgid_plural ", damage {damage} hit points\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: __main__.py:302
+msgid "New player: {login}"
+msgstr ""
+
+#: __main__.py:304
+msgid "{login} left"
+msgstr ""
+

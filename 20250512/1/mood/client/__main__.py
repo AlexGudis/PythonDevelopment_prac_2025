@@ -1,0 +1,246 @@
+"""Client"""
+
+import cowsay
+import sys
+import shlex
+import readline
+import cmd
+import os
+import gettext
+import locale
+import socket
+import threading
+
+
+from ..common import jgsbat
+
+
+localedir = os.path.join(os.path.dirname(__file__), "locales")
+
+LOCALES = {
+    ("ru_RU", "UTF-8"): gettext.translation("messages", localedir, ["ru"]),
+    ("en_US", "UTF-8"): gettext.NullTranslations()
+}
+locale.setlocale(locale.LC_CTYPE, locale.getdefaultlocale())
+
+gamer_loca = ("en_US", "UTF-8")
+
+def _(text):
+    return LOCALES[locale.getlocale()].gettext(text)
+
+
+class client(cmd.Cmd):
+    prompt = 'MUD> '
+    intro = _("<<< Welcome to Python-MUD 0.1 >>>")
+
+    readline.set_completer_delims(
+        readline.get_completer_delims().replace('-', ''))
+
+    def __init__(self, *args, socket, **kwargs):
+        self.s = socket
+        return super().__init__(*args, **kwargs)
+
+    def addmon_params_check(self, args):
+        args = shlex.split(args)
+        args.insert(0, 'addmon')
+        params = {'name': 'default', 'hello': 'Uwu', 'hp': 1, 'coords': (0, 0)}
+        #params['name'] = args[args.index('addmon') + 1]
+
+        #print(cowz)
+        try:
+            if args[args.index('addmon') + 1] in cowsay.list_cows() + ['jgsbat']:
+                params['name'] = args[args.index('addmon') + 1]
+            else:
+                raise ValueError
+        except ValueError:
+            print(
+                _('Incorrect name of the monster. It does not exists'))
+            raise ValueError
+
+        try:
+            params['hello'] = args[args.index('hello') + 1]
+        except ValueError:
+            print(
+                _('Something wrong with hello string when trying to parse it to a monster'))
+            raise ValueError
+
+        try:
+            params['hp'] = int(args[args.index('hp') + 1])
+            if params['hp'] <= 0:
+                raise ValueError
+        except ValueError:
+            print(_('hp argument should be a positive integer'))
+            raise ValueError
+
+        try:
+            start = args.index('coords')
+            params['coords'] = (int(args[start + 1]), int(args[start + 2]))
+        except ValueError:
+            print(_('Something wrong with coords when trying to parse it to a monster'))
+            raise ValueError
+
+        return params['coords'][0], params['coords'][1], params['hp'], params['hello'], params['name']
+
+    def do_addmon(self, args):
+        #print(cowsay.list_cows() + ['jgsbat'])
+        try:
+            x, y, hp, hello, name = self.addmon_params_check(args)
+            self.s.sendall(f"addmon {name} {x} {y} {hp} {hello}\n".encode())
+        except Exception:
+            print(_('Smth wrong with this command'))
+
+    def do_up(self, args):
+        self.s.sendall(f"move 0 -1\n".encode())
+
+    def do_down(self, args):
+        self.s.sendall(f"move 0 1\n".encode())
+
+    def do_left(self, args):
+        self.s.sendall(f"move -1 0\n".encode())
+
+    def do_right(self, args):
+        self.s.sendall(f"move 1 0\n".encode())
+
+    def do_movemonsters(self, args):
+        #print(f'ARGS = {args}')
+        if args in ['on', 'off']:
+            self.s.sendall(f"movemonsters {args}\n".encode())
+        else:
+            print(_('Incorrect mode'))
+            return
+
+    def do_locale(self, loca):
+        if loca in ['en_US.UTF8', 'ru_RU.UTF8']:
+            self.s.sendall(f"locale {loca}\n".encode())
+            if loca == 'en_US.UTF8':
+                gamer_loca = ("en_US", "UTF-8")
+            else:
+                gamer_loca = ("ru_RU", "UTF-8")
+            locale.setlocale(locale.LC_ALL, gamer_loca)
+        else:
+            print(_('Choose another locale'))
+            return
+        
+    def do_attack(self, args):
+        if len(args) == 0:
+            print(
+                _('Invalid input. You should provide at least name of the monster to attack'))
+            return
+
+        available_weapons = ['sword', 'spear', 'axe']
+        weapon = 'sword'
+        args = shlex.split(args)
+        if 'with' in args:  # Мы передали на вход какое-то оружие
+            weapon = args[-1]
+        if weapon not in available_weapons:
+            print(_('Unknown weapon'))
+            return
+
+        self.s.sendall(f"attack {weapon} {args[0]}\n".encode())
+
+    def complete_attack(self, text, line, begidx, endidx):
+        words = (line[:endidx] + ".").split()
+        DICT = []
+        available_monsters = cowsay.list_cows() + ['jgsbat']
+
+        match len(words):
+            case 2:  # attack ...
+                DICT = available_monsters
+            case 3:  # attack <name> ...
+                DICT = ['with']
+            case 4:  # attack <name> with ...
+                DICT = ['sword', 'spear', 'axe']
+
+        words[-1] = words[-1].replace('.', '')
+        return [c for c in DICT if c.startswith(text)]
+    
+
+    def complete_addmon(self, text, line, begidx, endidx):
+        words = (line[:endidx] + ".").split()
+        DICT = []
+        available_monsters = cowsay.list_cows() + ['jgsbat']
+
+        match len(words):
+            case 2:  # attack ...
+                DICT = available_monsters
+
+        words[-1] = words[-1].replace('.', '')
+        return [c for c in DICT if c.startswith(text)]
+
+    def do_sayall(self, args):
+        if len(args) == 0:
+            print(_("You should input your message to others"))
+            return
+
+        self.s.sendall(f"sayall {' '.join(shlex.split(args))}\n".encode())
+
+    def do_EOF(self, *args):
+        return 1
+
+    def from_srv(self, cmdline, s):
+        while response := s.recv(1024).rstrip().decode():
+            print(
+                f"\n{response}\n{
+                    cmdline.prompt}{
+                    readline.get_line_buffer()}",
+                end="",
+                flush=True)
+
+
+import time
+
+if __name__ == '__main__':
+    host = "localhost"
+    port = 1337
+    username = None
+    filemode = False
+    filename = ""
+
+    if '--file' in sys.argv:
+        filemode = True
+        file_index = sys.argv.index('--file')
+        if file_index + 1 >= len(sys.argv):
+            print("Ooops: You must specify a file name after --file")
+            sys.exit(1)
+        filename = sys.argv[file_index + 1]
+        username = sys.argv[1]
+        if len(sys.argv) > file_index + 2:
+            host = sys.argv[file_index + 2]
+        if len(sys.argv) > file_index + 3:
+            port = int(sys.argv[file_index + 3])
+    else:
+        username = sys.argv[1]
+        if len(sys.argv) > 2:
+            host = sys.argv[2]
+        if len(sys.argv) > 3:
+            port = int(sys.argv[3])
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.connect((host, port))
+    s.sendall(f"{username}\n".encode())
+    
+    if s.recv(1024).rstrip().decode() == '1':
+        print(f"Your login: {username}")
+        cmdline = client(socket=s)
+        mes = threading.Thread(target=cmdline.from_srv, args=(cmdline, s))
+        mes.start()
+
+        if filemode:
+            with open(filename, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+                    print(f"Executing: {line}")
+                    cmdline.onecmd(line)
+                    time.sleep(1)
+            cmdline.do_EOF()
+            print(_("All commands from file are done. Logout"))
+            #cmdline.cmdloop()
+        else:
+            cmdline.cmdloop()
+
+    else:
+        print(_("This login is already assigned"))
+    s.shutdown(socket.SHUT_RDWR)
