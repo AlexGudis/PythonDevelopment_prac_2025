@@ -1,19 +1,17 @@
-# Russian translations for PROJECT.
+# Translations template for PROJECT.
 # Copyright (C) 2025 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-05-24 14:22+0300\n"
-"PO-Revision-Date: 2025-05-08 12:58+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: ru\n"
-"Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,16 +24,16 @@ msgstr ""
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:126
 #, python-brace-format
 msgid "Set up locale: {args}"
-msgstr "Установлена локаль: {args}"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:150
 #, python-brace-format
 msgid "Moved to ({x}, {y})\n"
-msgstr "Переместился в ({x}, {y})\n"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:155
 msgid "Replaced the old monster\n"
-msgstr "Заменён старый монстр"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:156
 #, python-brace-format
@@ -43,134 +41,77 @@ msgid ""
 "Added monster {name} to ({x}, {y}) saying {hello}\n"
 "{replaced}"
 msgstr ""
-"Добавлен монстр с именем {name} в ({x}, {y}) с фразой {hello}\n"
-"{replaced}"
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:159
 #, python-brace-format
 msgid "{name} died\n"
-msgstr "{name} умер\n"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:161
 #, python-brace-format
 msgid "{name} now has"
-msgstr "{name} теперь имеет"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:161
 #, python-brace-format
 msgid " {hp} hit point\n"
 msgid_plural " {hp} hit points\n"
-msgstr[0] " {hp} очко здоровья\n"
-msgstr[1] " {hp} очка здоровья\n"
-msgstr[2] " {hp} очков здоровья\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:162
 #, python-brace-format
 msgid "{login} attacked {name}"
-msgstr "{login} атаковал {name}"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:162
 #, python-brace-format
 msgid ", damage {damage} hit point\n"
 msgid_plural ", damage {damage} hit points\n"
-msgstr[0] ", урон {damage} очко здоровья\n"
-msgstr[1] ", урон {damage} очка здоровья\n"
-msgstr[2] ", урон {damage} очков здоровья\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:164
 #, python-brace-format
 msgid "New player: {login}"
-msgstr "Новый игрок: {login}"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:166
 #, python-brace-format
 msgid "{login} left"
-msgstr "{login} покинул игру"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:315
 msgid "Moving monsters: on"
-msgstr "Режим бродячих монстров включен"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:318
 msgid "Moving monsters: off"
-msgstr "Режим бродячих монстров выключен"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
 msgid "right"
-msgstr "вправо"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
 msgid "left"
-msgstr "влево"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
 msgid "up"
-msgstr "вверх"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
 msgid "down"
-msgstr "вниз"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:488
 #, python-brace-format
 msgid "{name} moved one cell {direction}"
-msgstr "{name} переместился на одну ячейку {direction}"
+msgstr ""
 
 #: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:491
 #, python-brace-format
 msgid "{name} new coords is {x}, {y}"
-msgstr "{name} новые координаты теперь {x}, {y}"
-
-#~ msgid "<<< Welcome to Python-MUD 0.1 >>>"
-#~ msgstr "<<< Добро пожаловать в Python-MUD 0.1 >>"
-
-#~ msgid "Incorrect name of the monster. It does not exists"
-#~ msgstr "Невеное имя монстра. Оно не существует"
-
-#~ msgid "Something wrong with hello string when trying to parse it to a monster"
-#~ msgstr ""
-#~ "Что-то не так с фразой монстра при"
-#~ " попытке распарсить её и закрепить за"
-#~ " монстром"
-
-#~ msgid "hp argument should be a positive integer"
-#~ msgstr "Очки здоровья должны быть положительным целым числом"
-
-#~ msgid "Something wrong with coords when trying to parse it to a monster"
-#~ msgstr ""
-#~ "Что-то не так с координатами монстра "
-#~ "при попытке их распарсить и закрепить"
-#~ " за монстром"
-
-#~ msgid "Smth wrong with this command"
-#~ msgstr "Что-то не так с этой командой"
-
-#~ msgid "Incorrect mode"
-#~ msgstr "Неверный режим"
-
-#~ msgid "Choose another locale"
-#~ msgstr "Выберите другую локаль"
-
-#~ msgid ""
-#~ "Invalid input. You should provide at "
-#~ "least name of the monster to "
-#~ "attack"
-#~ msgstr ""
-#~ "Неверный ввод. Вам необходимо предоставить "
-#~ "хотя бы имя монстра для атаки"
-
-#~ msgid "Unknown weapon"
-#~ msgstr "Неизвестный вид оружия"
-
-#~ msgid "You should input your message to others"
-#~ msgstr "Необходимо ввести сообщение всем игрокам"
-
-#~ msgid "tralelelatralala"
-#~ msgstr "тра тра тра тра"
-
-#~ msgid "All commands from file are done. Logout"
-#~ msgstr "Все команды из файла выполнены. Выход"
-
-#~ msgid "This login is already assigned"
-#~ msgstr "Этот логин уже занят"
+msgstr ""
 

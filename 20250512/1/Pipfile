@@ -9,6 +9,7 @@ autodoc = "*"
 sphinx-autodoc-typehints = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
+doit = "*"
 
 [dev-packages]
 

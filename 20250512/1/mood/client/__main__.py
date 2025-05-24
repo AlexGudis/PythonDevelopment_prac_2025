@@ -3,6 +3,24 @@
 import time
 from . import *
 
+
+
+localedir = os.path.join(os.path.dirname(__file__), "locales")
+
+LOCALES = {
+    ("ru_RU", "UTF-8"): gettext.translation("messages", localedir, ["ru"]),
+    ("en_US", "UTF-8"): gettext.NullTranslations()
+}
+locale.setlocale(locale.LC_CTYPE, locale.getdefaultlocale())
+
+gamer_loca = ("en_US", "UTF-8")
+
+def _(text):
+    return LOCALES[locale.getlocale()].gettext(text)
+
+
+print(_('din din din din'))
+
 if __name__ == '__main__':
     host = "localhost"
     port = 1337
