@@ -5,17 +5,17 @@ from unittest.mock import MagicMock, patch
 class TestClient(unittest.TestCase):
     def setUp(self):
         self.mocker = MagicMock()
-        self.cmdline = client.Client_MUD(socket=self.mocker)
+        self.cmdline = client.Client(socket=self.mocker)
 
     def test_1(self):
         """Test up"""
-        self.cmdline.do_up("")
-        self.mocker.sendall.assert_called_with("move 0 -1\n".encode())
+        self.cmdline.do_down("")
+        self.mocker.sendall.assert_called_with("move 0 1\n".encode())
 
     def test_2(self):
         """Test left"""
-        self.cmdline.do_left("")
-        self.mocker.sendall.assert_called_with("move -1 0\n".encode())
+        self.cmdline.do_right("")
+        self.mocker.sendall.assert_called_with("move 1 0\n".encode())
 
     @patch('builtins.input', side_effect=['admon', EOFError])
     def test_3(self, inp):
