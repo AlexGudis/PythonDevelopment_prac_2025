@@ -29,7 +29,7 @@ def _(text):
     return LOCALES[locale.getlocale()].gettext(text)
 
 
-class client(cmd.Cmd):
+class Client(cmd.Cmd):
     prompt = 'MUD> '
     intro = _("<<< Welcome to Python-MUD 0.1 >>>")
 

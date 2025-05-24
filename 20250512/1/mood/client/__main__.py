@@ -36,7 +36,7 @@ if __name__ == '__main__':
     
     if s.recv(1024).rstrip().decode() == '1':
         print(f"Your login: {username}")
-        cmdline = client(socket=s)
+        cmdline = Client(socket=s)
         mes = threading.Thread(target=cmdline.from_srv, args=(cmdline, s))
         mes.start()
 
