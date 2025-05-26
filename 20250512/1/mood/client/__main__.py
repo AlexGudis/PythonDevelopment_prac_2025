@@ -3,8 +3,6 @@
 import time
 from . import *
 
-
-
 localedir = os.path.join(os.path.dirname(__file__), "locales")
 
 LOCALES = {
@@ -14,6 +12,7 @@ LOCALES = {
 locale.setlocale(locale.LC_CTYPE, locale.getdefaultlocale())
 
 gamer_loca = ("en_US", "UTF-8")
+
 
 def _(text):
     return LOCALES[locale.getlocale()].gettext(text)
@@ -51,7 +50,6 @@ if __name__ == '__main__':
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.connect((host, port))
     s.sendall(f"{username}\n".encode())
-    
     if s.recv(1024).rstrip().decode() == '1':
         print(f"Your login: {username}")
         cmdline = Client(socket=s)
@@ -69,7 +67,6 @@ if __name__ == '__main__':
                     time.sleep(1)
             cmdline.do_EOF()
             print(_("All commands from file are done. Logout"))
-            #cmdline.cmdloop()
         else:
             cmdline.cmdloop()
 

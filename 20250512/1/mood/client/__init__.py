@@ -8,9 +8,6 @@ import os
 import gettext
 import locale
 
-from ..common import jgsbat
-
-
 localedir = os.path.join(os.path.dirname(__file__), "locales")
 
 LOCALES = {
@@ -27,6 +24,8 @@ def _(text):
 
 
 class Client(cmd.Cmd):
+    """Client functionality"""
+
     prompt = 'MUD> '
     intro = _("<<< Welcome to Python-MUD 0.1 >>>")
 
@@ -34,10 +33,14 @@ class Client(cmd.Cmd):
         readline.get_completer_delims().replace('-', ''))
 
     def __init__(self, *args, socket, **kwargs):
+        """Client basic parametrs"""
+
         self.s = socket
         return super().__init__(*args, **kwargs)
 
     def addmon_params_check(self, args):
+        """Check params before adding monster"""
+
         args = shlex.split(args)
         args.insert(0, 'addmon')
         params = {'name': 'default', 'hello': 'Uwu', 'hp': 1, 'coords': (0, 0)}
@@ -79,6 +82,8 @@ class Client(cmd.Cmd):
         return params['coords'][0], params['coords'][1], params['hp'], params['hello'], params['name']
 
     def do_addmon(self, args):
+        """Adds monsters"""
+
         # print(cowsay.list_cows() + ['jgsbat'])
         try:
             x, y, hp, hello, name = self.addmon_params_check(args)
@@ -87,18 +92,28 @@ class Client(cmd.Cmd):
             print(_('Smth wrong with this command'))
 
     def do_up(self, args):
+        """Go up"""
+
         self.s.sendall(f"move 0 -1\n".encode())
 
     def do_down(self, args):
+        """Go down"""
+
         self.s.sendall(f"move 0 1\n".encode())
 
     def do_left(self, args):
+        """Go left"""
+
         self.s.sendall(f"move -1 0\n".encode())
 
     def do_right(self, args):
+        """Go right"""
+
         self.s.sendall(f"move 1 0\n".encode())
 
     def do_movemonsters(self, args):
+        """Movemonster commad realization"""
+
         # print(f'ARGS = {args}')
         if args in ['on', 'off']:
             self.s.sendall(f"movemonsters {args}\n".encode())
@@ -107,6 +122,8 @@ class Client(cmd.Cmd):
             return
 
     def do_locale(self, loca):
+        """Chose locale"""
+
         if loca in ['en_US.UTF8', 'ru_RU.UTF8']:
             self.s.sendall(f"locale {loca}\n".encode())
             if loca == 'en_US.UTF8':
@@ -119,6 +136,8 @@ class Client(cmd.Cmd):
             return
 
     def do_attack(self, args):
+        """Attack monster checker"""
+
         if len(args) == 0:
             print(
                 _('Invalid input. You should provide at least name of the monster to attack'))
@@ -136,6 +155,7 @@ class Client(cmd.Cmd):
         self.s.sendall(f"attack {weapon} {args[0]}\n".encode())
 
     def complete_attack(self, text, line, begidx, endidx):
+        """Fase attack command helper"""
         words = (line[:endidx] + ".").split()
         DICT = []
         available_monsters = cowsay.list_cows() + ['jgsbat']
@@ -152,6 +172,8 @@ class Client(cmd.Cmd):
         return [c for c in DICT if c.startswith(text)]
 
     def complete_addmon(self, text, line, begidx, endidx):
+        """Fast addmon command helper"""
+
         words = (line[:endidx] + ".").split()
         DICT = []
         available_monsters = cowsay.list_cows() + ['jgsbat']
@@ -164,6 +186,8 @@ class Client(cmd.Cmd):
         return [c for c in DICT if c.startswith(text)]
 
     def do_sayall(self, args):
+        """Send msg to all users"""
+
         if len(args) == 0:
             print(_("You should input your message to others"))
             return
@@ -171,9 +195,13 @@ class Client(cmd.Cmd):
         self.s.sendall(f"sayall {' '.join(shlex.split(args))}\n".encode())
 
     def do_EOF(self, *args):
+        """Exit game"""
+
         return 1
 
     def from_srv(self, cmdline, s):
+        """Check msg from server"""
+
         while response := s.recv(1024).rstrip().decode():
             print(
                 f"\n{response}\n{

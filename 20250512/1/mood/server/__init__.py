@@ -1,6 +1,7 @@
-"""
-Multi User Dungeon (MUD) Game Server
+"""Multi User Dungeon (MUD) Game Server
+
 ------------------------------------
+
 A multiplayer game where players can move around a grid, encounter monsters, cooperate, and interact with them.
 
 Modules used:
@@ -20,7 +21,6 @@ Project Components:
 import cowsay
 import gettext
 import asyncio
-import time
 import random
 import locale
 import os
@@ -34,7 +34,6 @@ movemonsters = True
 # ================================
 
 class Monster:
-
     """Represents a game monster with interactive abilities.
 
     Attributes:
@@ -46,6 +45,8 @@ class Monster:
     """
 
     def __init__(self, x, y, hp, name, phrase=''):
+        """Monster parameters"""
+
         self.x = x
         self.y = y
         self.hp = hp
@@ -53,8 +54,7 @@ class Monster:
         self.name = name
 
     def say_hi(self):
-        """
-        Return a cowsay greeting from the monster.
+        """Return a cowsay greeting from the monster.
 
         Returns:
             str: Monster's greeting as ASCII art.
@@ -88,7 +88,6 @@ print(_('Heloo!!!'))
 
 
 class Gamer:
-
     """Represents a player in the MUD game.
 
     Attributes:
@@ -112,6 +111,8 @@ class Gamer:
         self.queue = asyncio.Queue()
 
     def config_language(self, args):
+        """Choose locale"""
+
         if args == 'ru_RU.UTF8':
             # print('Поставили русскую локаль')
             self.translate = ('ru_RU', 'UTF-8')
@@ -145,6 +146,7 @@ class Gamer:
 
 
 def generate_translation(fun=None, name='', x=0, y=0, hello='', login='', damage=0, check=0, hp=0):
+    """Used to generete msg to help localize messaging"""
     if fun == 'addmon':
         replaced = '' if check == 0 else _("Replaced the old monster\n")
         return _("Added monster {name} to ({x}, {y}) saying {hello}\n{replaced}").format(name=name, x=x, y=y, hello=hello, replaced=replaced)
@@ -166,22 +168,17 @@ def generate_translation(fun=None, name='', x=0, y=0, hello='', login='', damage
 # ================================
 
 class MUD:
-    """
-    Core game logic handler.
-    """
+    """Core game logic handler."""
 
     def __init__(self):
-        """
-        Initialize the game field, monster tracking, and weapon data.
-        """
+        """Initialize the game field, monster tracking, and weapon data."""
 
         self.pole = [['*' for _ in range(10)] for _ in range(10)]
         self.monsters_coords = set()
         self.weapons = {'sword': 10, 'spear': 15, 'axe': 20}
 
     def encounter(self, x, y):
-        """
-        Check if a player encounters a monster.
+        """Check if a player encounters a monster.
 
         Args:
             x (int): X-coordinate.
@@ -197,8 +194,7 @@ class MUD:
         return ''
 
     def moving(self, player, d_x, d_y):
-        """
-        Move a player and handle encounters.
+        """Move a player and handle encounters.
 
         Args:
             player (Gamer): The player object.
@@ -215,8 +211,7 @@ class MUD:
         return s
 
     def do_addmon(self, x, y, hp, hello, name):
-        """
-        Add or replace a monster at a given position.
+        """Add or replace a monster at a given position.
 
         Args:
             x (int): X-coordinate.
@@ -249,8 +244,7 @@ class MUD:
         return params
 
     def do_attack(self, x, y, weapon, name):
-        """
-        Handle an attack action from a player.
+        """Handle an attack action from a player.
 
         Args:
             x (int): Player's X-coordinate.
@@ -288,8 +282,7 @@ class MUD:
         return params
 
     def generate_sayall(self, args):
-        """
-        Generate a broadcast message from a player.
+        """Generate a broadcast message from a player.
 
         Args:
             args (list): List of words.
@@ -301,6 +294,8 @@ class MUD:
         return ' '.join(args)
 
     def do_movemonsters(self, args, player):
+        """On/off monster movements"""
+
         global movemonsters
         locale.setlocale(locale.LC_ALL, player.translate)
 
@@ -317,8 +312,7 @@ class MUD:
 # ================================
 
 async def echo(reader, writer):
-    """
-    Main player communication loop.
+    """Main player communication loop.
 
     Args:
         reader (asyncio.StreamReader): Player input stream.
@@ -405,8 +399,7 @@ async def echo(reader, writer):
 
 
 async def monster_go():
-    """
-    Periodically moves monsters on the game field in random directions with localization support.
+    """Periodically moves monsters on the game field in random directions with localization support.
 
     This coroutine runs indefinitely in the background, performing the following actions every 30 seconds:
     1. Selects a random monster from the current monsters on the field
@@ -502,8 +495,7 @@ async def broadcast_message(
     generator_args: dict = None,
     exclude_player: object = None
 ) -> None:
-    """
-    Sends a message to all connected players with localization support.
+    """Sends a message to all connected players with localization support.
 
     Parameters:
         message_text (str): Base message text to send (if no generator provided)
@@ -539,9 +531,7 @@ async def broadcast_message(
 
 
 async def main():
-    """
-    Main entry point for the MUD (Multi-User Dungeon) game server.
-    """
+    """Main entry point for the MUD (Multi-User Dungeon) game server."""
 
     global game, players
     game = MUD()
@@ -558,4 +548,6 @@ async def main():
 
 
 def run_server():
+    """Used to run the server"""
+
     asyncio.run(main())

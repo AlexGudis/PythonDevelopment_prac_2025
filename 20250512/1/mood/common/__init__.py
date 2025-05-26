@@ -1,3 +1,5 @@
+"""File for new monster"""
+
 import cowsay
 from io import StringIO
 
