@@ -1,16 +1,12 @@
 """Init for client"""
 
 import cowsay
-import sys
 import shlex
 import readline
 import cmd
 import os
 import gettext
 import locale
-import socket
-import threading
-
 
 from ..common import jgsbat
 
@@ -24,6 +20,7 @@ LOCALES = {
 locale.setlocale(locale.LC_CTYPE, locale.getdefaultlocale())
 
 gamer_loca = ("en_US", "UTF-8")
+
 
 def _(text):
     return LOCALES[locale.getlocale()].gettext(text)
@@ -44,9 +41,9 @@ class Client(cmd.Cmd):
         args = shlex.split(args)
         args.insert(0, 'addmon')
         params = {'name': 'default', 'hello': 'Uwu', 'hp': 1, 'coords': (0, 0)}
-        #params['name'] = args[args.index('addmon') + 1]
+        # params['name'] = args[args.index('addmon') + 1]
 
-        #print(cowz)
+        # print(cowz)
         try:
             if args[args.index('addmon') + 1] in cowsay.list_cows() + ['jgsbat']:
                 params['name'] = args[args.index('addmon') + 1]
@@ -82,7 +79,7 @@ class Client(cmd.Cmd):
         return params['coords'][0], params['coords'][1], params['hp'], params['hello'], params['name']
 
     def do_addmon(self, args):
-        #print(cowsay.list_cows() + ['jgsbat'])
+        # print(cowsay.list_cows() + ['jgsbat'])
         try:
             x, y, hp, hello, name = self.addmon_params_check(args)
             self.s.sendall(f"addmon {name} {x} {y} {hp} {hello}\n".encode())
@@ -102,7 +99,7 @@ class Client(cmd.Cmd):
         self.s.sendall(f"move 1 0\n".encode())
 
     def do_movemonsters(self, args):
-        #print(f'ARGS = {args}')
+        # print(f'ARGS = {args}')
         if args in ['on', 'off']:
             self.s.sendall(f"movemonsters {args}\n".encode())
         else:
@@ -120,7 +117,7 @@ class Client(cmd.Cmd):
         else:
             print(_('Choose another locale'))
             return
-        
+
     def do_attack(self, args):
         if len(args) == 0:
             print(
@@ -153,7 +150,6 @@ class Client(cmd.Cmd):
 
         words[-1] = words[-1].replace('.', '')
         return [c for c in DICT if c.startswith(text)]
-    
 
     def complete_addmon(self, text, line, begidx, endidx):
         words = (line[:endidx] + ".").split()

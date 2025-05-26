@@ -34,9 +34,9 @@ movemonsters = True
 # ================================
 
 class Monster:
-    
+
     """Represents a game monster with interactive abilities.
-    
+
     Attributes:
         x (int): X-coordinate on the game field.
         y (int): Y-coordinate on the game field.
@@ -53,7 +53,6 @@ class Monster:
         self.name = name
 
     def say_hi(self):
-
         """
         Return a cowsay greeting from the monster.
 
@@ -67,7 +66,6 @@ class Monster:
             return cowsay.cowsay(self.phrase, cow=self.name)
 
 
-
 localedir = os.path.join(os.path.dirname(__file__), "locales")
 
 LOCALES = {
@@ -76,9 +74,9 @@ LOCALES = {
 }
 locale.setlocale(locale.LC_CTYPE, locale.getdefaultlocale())
 
+
 def _(text):
     return LOCALES[locale.getlocale()].gettext(text)
-
 
 
 print(_('Heloo!!!'))
@@ -92,7 +90,7 @@ print(_('Heloo!!!'))
 class Gamer:
 
     """Represents a player in the MUD game.
-    
+
     Attributes:
         x (int): Current X-coordinate on the game field (0-9).
         y (int): Current Y-coordinate on the game field (0-9).
@@ -100,15 +98,13 @@ class Gamer:
     """
 
     def __init__(self, x, y, lang=('en_US', 'UTF-8')):
-
         """Initialize the player with starting coordinates.
         Default position is (0,0) for each palyer
-        
+
         Args:
             x: Initial X position (0-9).
             y: Initial Y position (0-9).
         """
-
 
         self.translate = lang
         self.x = x
@@ -117,7 +113,7 @@ class Gamer:
 
     def config_language(self, args):
         if args == 'ru_RU.UTF8':
-            #print('Поставили русскую локаль')
+            # print('Поставили русскую локаль')
             self.translate = ('ru_RU', 'UTF-8')
         else:
             self.translate = ('en_US', 'UTF-8')
@@ -125,19 +121,17 @@ class Gamer:
         locale.setlocale(locale.LC_ALL, self.translate)
         return _("Set up locale: {args}").format(args=args)
 
-
     def move(self, d_x, d_y):
-
         """Move the player by specified deltas with wrap-around.
-        
+
         Args:
             d_x: Movement delta on X-axis (+/- 1).
             d_y: Movement delta on Y-axis (+/- 1).
             Depends on the specific move commands. See client docs
-            
+
         Returns:
             String confirmation with new coordinates of the player.
-            
+
         Example:
             >>> right
             'Moved to (1, 0)'
@@ -152,19 +146,19 @@ class Gamer:
 
 def generate_translation(fun=None, name='', x=0, y=0, hello='', login='', damage=0, check=0, hp=0):
     if fun == 'addmon':
-        replaced = '' if check == 0 else _("Replaced the old monster\n") 
-        return _("Added monster {name} to ({x}, {y}) saying {hello}\n{replaced}").format(name=name,x=x, y=y, hello=hello, replaced=replaced)
+        replaced = '' if check == 0 else _("Replaced the old monster\n")
+        return _("Added monster {name} to ({x}, {y}) saying {hello}\n{replaced}").format(name=name, x=x, y=y, hello=hello, replaced=replaced)
     elif fun == 'attack':
         if check == 0:
-            health =_("{name} died\n").format(name=name)
+            health = _("{name} died\n").format(name=name)
         else:
-            health = (_("{name} now has").format(name=name) + LOCALES[locale.getlocale()].ngettext(" {hp} hit point\n", " {hp} hit points\n", hp).format(hp=hp))
+            health = (_("{name} now has").format(name=name) + LOCALES[locale.getlocale(
+            )].ngettext(" {hp} hit point\n", " {hp} hit points\n", hp).format(hp=hp))
         return (_("{login} attacked {name}").format(login=login, name=name) + LOCALES[locale.getlocale()].ngettext(", damage {damage} hit point\n", ", damage {damage} hit points\n", damage).format(damage=damage) + health)
     elif fun == 'new':
         return _('New player: {login}').format(login=login)
     else:
         return _("{login} left").format(login=login)
-
 
 
 # ================================
@@ -243,8 +237,8 @@ class MUD:
             m.y}) saying {
                 m.phrase} with hp={
                     m.hp}'
-        
-        params = {'name': name, 'x': x, 'y': y,'hello': hello}
+
+        params = {'name': name, 'x': x, 'y': y, 'hello': hello}
         if (m.x, m.y) in self.monsters_coords:
             mes += "\nReplaced the old monster"
             params['check'] = 1
@@ -305,7 +299,7 @@ class MUD:
         """
 
         return ' '.join(args)
-    
+
     def do_movemonsters(self, args, player):
         global movemonsters
         locale.setlocale(locale.LC_ALL, player.translate)
@@ -349,7 +343,7 @@ async def echo(reader, writer):
         players[login] = Gamer(0, 0)
         receive = asyncio.create_task(players[login].queue.get())
         writer.write(f"1".encode())
-        await broadcast_message(message_generator='new', generator_args={'login':login}, exclude_player=players[login])
+        await broadcast_message(message_generator='new', generator_args={'login': login}, exclude_player=players[login])
 
     me = "{}:{}".format(*writer.get_extra_info('peername'))
     print(login, me)
@@ -369,7 +363,8 @@ async def echo(reader, writer):
                     case ['move', *args]:
                         default_loc = locale.getlocale()
                         d_x, d_y = [int(i) for i in args]
-                        writer.write(game.moving(players[login], d_x, d_y).encode())
+                        writer.write(game.moving(
+                            players[login], d_x, d_y).encode())
                         locale.setlocale(locale.LC_ALL, default_loc)
 
                     case ['sayall', *args]:
@@ -379,18 +374,21 @@ async def echo(reader, writer):
                     case ['attack', *args]:
                         x, y = players[login].x, players[login].y
                         weapon, name = args
-                        answer = game.do_attack(x, y, int(game.weapons[weapon]), name)
+                        answer = game.do_attack(
+                            x, y, int(game.weapons[weapon]), name)
                         answer['login'] = login
                         await broadcast_message(message_generator='attack', generator_args=answer)
-                    
+
                     case ['movemonsters', type]:
-                        #print('WANT TO', type)
+                        # print('WANT TO', type)
                         default_loc = locale.getlocale()
-                        writer.write(game.do_movemonsters(type, players[login]).encode())
+                        writer.write(game.do_movemonsters(
+                            type, players[login]).encode())
                         locale.setlocale(locale.LC_ALL, default_loc)
 
                     case ['locale', loc]:
-                        writer.write(players[login].config_language(loc).encode())
+                        writer.write(
+                            players[login].config_language(loc).encode())
 
             if request is receive:
                 receive = asyncio.create_task(players[login].queue.get())
@@ -402,14 +400,14 @@ async def echo(reader, writer):
     writer.close()
     print(login, "LEFT")
     del players[login]
-    await broadcast_message(message_generator='left', generator_args={'login':login})
+    await broadcast_message(message_generator='left', generator_args={'login': login})
     await writer.wait_closed()
 
 
 async def monster_go():
     """
     Periodically moves monsters on the game field in random directions with localization support.
-    
+
     This coroutine runs indefinitely in the background, performing the following actions every 30 seconds:
     1. Selects a random monster from the current monsters on the field
     2. Chooses a random direction (left, right, up, down)
@@ -429,14 +427,14 @@ async def monster_go():
     """
 
     cnt = 0
-    move_to = {_('right'):(1, 0), _('left'):(-1, 0), _('up'): (0, -1), _('down'): (0, 1)}
-
+    move_to = {_('right'): (1, 0), _('left'): (-1, 0),
+               _('up'): (0, -1), _('down'): (0, 1)}
 
     directions = {
         'en_US': {'right': (1, 0), 'left': (-1, 0), 'up': (0, -1), 'down': (0, 1)},
         'ru_RU': {'right': (1, 0), 'left': (-1, 0), 'up': (0, -1), 'down': (0, 1)}
     }
-    
+
     direction_names = {
         'en_US': {
             (1, 0): 'right',
@@ -461,7 +459,8 @@ async def monster_go():
             random_m_x = -1
             random_m_y = -1
             while not_done:
-                random_m_x, random_m_y = random.choice(list(game.monsters_coords))
+                random_m_x, random_m_y = random.choice(
+                    list(game.monsters_coords))
                 random_monstr = game.pole[random_m_y][random_m_x]
                 print(random_monstr.say_hi())
 
@@ -469,7 +468,7 @@ async def monster_go():
                 dx = move_to[direction][0]
                 dy = move_to[direction][1]
 
-                if ( (random_m_x + dx) % 10, (random_m_y + dy) % 10) not in game.monsters_coords:
+                if ((random_m_x + dx) % 10, (random_m_y + dy) % 10) not in game.monsters_coords:
                     game.pole[random_m_y][random_m_x] = '*'
                     game.monsters_coords.remove((random_m_x, random_m_y))
                     random_m_x += dx
@@ -478,24 +477,25 @@ async def monster_go():
                     random_monstr.y = random_m_y % 10
                     game.pole[random_monstr.y][random_monstr.x] = random_monstr
                     not_done = False
-                    game.monsters_coords.add((random_monstr.x, random_monstr.y))
-                    
+                    game.monsters_coords.add(
+                        (random_monstr.x, random_monstr.y))
+
                     for player in players.values():
                         locale.setlocale(locale.LC_ALL, player.translate)
                         lang = player.translate[0]  # 'en_US' или 'ru_RU'
                         direction = direction_names[lang][(dx, dy)]
-                        
+
                         await player.queue.put(_("{name} moved one cell {direction}").format(
                             name=random_monstr.name, direction=direction))
-                        
+
                         await player.queue.put(_("{name} new coords is {x}, {y}").format(
                             name=random_monstr.name, x=random_monstr.x, y=random_monstr.y))
-                    
+
             for p in players.values():
                 if (p.x, p.y) == (random_m_x, random_m_y):
                     await p.queue.put(f"{game.encounter(random_m_x, random_m_y)}")
 
-        
+
 async def broadcast_message(
     message_text: str = '',
     message_generator: str = None,
@@ -504,36 +504,36 @@ async def broadcast_message(
 ) -> None:
     """
     Sends a message to all connected players with localization support.
-    
+
     Parameters:
         message_text (str): Base message text to send (if no generator provided)
         message_generator (str): Optional function to which we should provide args
         generator_args (dict): Arguments to use in the message generator
         exclude_player (Player): Specific player to exclude from receiving the message
-        
+
     The function handles locale settings for each player individually and
     restores the original locale after completion.
     """
     if generator_args is None:
         generator_args = {}
-    
+
     original_locale = locale.getlocale()
-    
+
     try:
         for player in players.values():
             # Не отправляем сообщения самому себе
             if player == exclude_player:
                 continue
-                
+
             locale.setlocale(locale.LC_ALL, player.translate)
-            
+
             final_message = (
                 generate_translation(fun=message_generator, **generator_args)
                 if message_generator else message_text
             )
-            
+
             await player.queue.put(f"{final_message}")
-            
+
     finally:
         locale.setlocale(locale.LC_ALL, original_locale)
 
@@ -543,13 +543,12 @@ async def main():
     Main entry point for the MUD (Multi-User Dungeon) game server.
     """
 
-    
     global game, players
     game = MUD()
     players = {}
     server = await asyncio.start_server(
-        echo,        
-        '0.0.0.0',   
+        echo,
+        '0.0.0.0',
         1337,        # Порт по умолчанию
     )
     asyncio.create_task(monster_go())

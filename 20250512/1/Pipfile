@@ -10,6 +10,8 @@ sphinx-autodoc-typehints = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 doit = "*"
+flake8 = "*"
+pydocstyle = "*"
 
 [dev-packages]
 
