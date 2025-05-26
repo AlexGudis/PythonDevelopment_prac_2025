@@ -12,6 +12,7 @@ sphinx-rtd-theme = "*"
 doit = "*"
 flake8 = "*"
 pydocstyle = "*"
+setuptools = "*"
 
 [dev-packages]
 

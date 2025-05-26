@@ -208,6 +208,29 @@ def task_test():
     }
 
 
+def task_erase():
+    """Clean represitory"""
+    return {
+            'actions': ['git clean -xdf'],
+    }
+
+
+def task_sdist():
+    """Make sdist"""
+    return {
+            'task_dep': ['html', 'erase'],
+            'actions': ['python3 -m build -s -n']
+    }
+
+
+def task_wheel():
+    """Make wheel"""
+    return {
+            'task_dep': ['html'],
+            'actions': ['python3 -m build -w']
+    }
+
+
 babel_cfg_content = """\
 [python: mood/**.py]
 """
@@ -216,3 +239,4 @@ if not babel_cfg_path.exists():
     LOCALE_DIR.mkdir(parents=True, exist_ok=True)
     with open(babel_cfg_path, "w") as f:
         f.write(babel_cfg_content)
+

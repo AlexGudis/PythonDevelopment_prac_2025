@@ -5,8 +5,8 @@
 `python3 -m mood.client <client_name>`
 
 
-## Порядок работы с документацией:
-
+# Проверка сервера с мокерами
+python -m unittest test_client_command_parsing.py
 
 
 ## Порядок работы с переводами:

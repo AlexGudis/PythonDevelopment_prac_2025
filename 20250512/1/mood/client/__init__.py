@@ -7,6 +7,8 @@ import cmd
 import os
 import gettext
 import locale
+import webbrowser
+from pathlib import Path
 
 localedir = os.path.join(os.path.dirname(__file__), "locales")
 
@@ -37,6 +39,10 @@ class Client(cmd.Cmd):
 
         self.s = socket
         return super().__init__(*args, **kwargs)
+    
+    def do_documentation(self, args):
+        """Open documentation in browser"""
+        webbrowser.open(f"{str(Path(__file__).parents[1])}/docs/build/html/index.html")
 
     def addmon_params_check(self, args):
         """Check params before adding monster"""
