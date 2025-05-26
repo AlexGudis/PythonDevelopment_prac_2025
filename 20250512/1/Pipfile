@@ -13,6 +13,7 @@ doit = "*"
 flake8 = "*"
 pydocstyle = "*"
 setuptools = "*"
+build = "*"
 
 [dev-packages]
 

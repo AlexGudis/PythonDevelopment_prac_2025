@@ -13,7 +13,7 @@ build-backend = "setuptools.build_meta"
 mood="mood"
 
 [tool.setuptools.package-data]
-mood=["mood/ru/LC_MESSAGES/messages.mo", "mood/docs/build/*", "mood/client/*.py", "mood/server/*.py"]
+mood=["mood/server/locales/ru/LC_MESSAGES/messages.mo", "mood/client/locales/ru/LC_MESSAGES/messages.mo", "mood/build/*", "mood/client/*.py", "mood/server/*.py"]
 
 [project.scripts]
 client = "mood.client.__main__:run_client"

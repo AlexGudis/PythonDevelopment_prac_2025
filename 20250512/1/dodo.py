@@ -13,7 +13,7 @@ MO_FILE_RU = LOCALE_DIR / "ru" / "LC_MESSAGES" / "messages.mo"
 I18N_SOURCE_FILES = list(PROJECT_ROOT.glob("mood/server/**/*.py"))
 DOCS_DIR = PROJECT_ROOT / "docs"
 DOCS_SOURCE_DIR = DOCS_DIR / "source"
-DOCS_BUILD_DIR = DOCS_DIR / "build"
+DOCS_BUILD_DIR = PROJECT_ROOT / "mood" / "build"
 TEST_FILES = list(PROJECT_ROOT.glob("test.py"))
 SOURCE_FILES = list(PROJECT_ROOT.glob("mood/**/*.py"))
 
