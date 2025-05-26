@@ -172,7 +172,7 @@ def task_html():
     """
     Генерация HTML документации с помощью Sphinx.
     """
-    html_index_path = str(DOCS_BUILD_DIR / "html" / "index.html")
+    html_index_path = str(PROJECT_ROOT / "mood" / "build" / "html" / "index.html")
     build_dir_path = str(DOCS_BUILD_DIR)
     docs_dir_path = str(DOCS_DIR)
 

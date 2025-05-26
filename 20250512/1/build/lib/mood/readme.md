@@ -9,6 +9,19 @@
 python -m unittest test_client_command_parsing.py
 
 
+# wheel и toml
+doit wheel
+получаем папку dist и файл .whl
+
+создаем отдельные папки, там делаем pipenv install <путь до .whl>
+делаем pipenv shell
+далее запускаем команды server
+и client 
+тестируем
+
+
+
+
 ## Порядок работы с переводами:
 - Извлекаем строки для перевода
 

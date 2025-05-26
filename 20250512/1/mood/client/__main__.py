@@ -1,7 +1,15 @@
 """Client"""
 
 import time
-from . import *
+from . import Client
+
+import sys
+import socket
+import threading
+import locale
+import os
+import gettext
+
 
 localedir = os.path.join(os.path.dirname(__file__), "locales")
 
@@ -17,59 +25,36 @@ gamer_loca = ("en_US", "UTF-8")
 def _(text):
     return LOCALES[locale.getlocale()].gettext(text)
 
-
-print(_('din din din din'))
-
-if __name__ == '__main__':
+def run_client():
+    """Run client"""
+    if len(sys.argv) > 3 and sys.argv[2] == '--file':
+        file = open(sys.argv[3])
+    else:
+        file = None
     host = "localhost"
     port = 1337
-    username = None
-    filemode = False
-    filename = ""
-
-    if '--file' in sys.argv:
-        filemode = True
-        file_index = sys.argv.index('--file')
-        if file_index + 1 >= len(sys.argv):
-            print("Ooops: You must specify a file name after --file")
-            sys.exit(1)
-        filename = sys.argv[file_index + 1]
-        username = sys.argv[1]
-        if len(sys.argv) > file_index + 2:
-            host = sys.argv[file_index + 2]
-        if len(sys.argv) > file_index + 3:
-            port = int(sys.argv[file_index + 3])
-    else:
-        username = sys.argv[1]
-        if len(sys.argv) > 2:
-            host = sys.argv[2]
-        if len(sys.argv) > 3:
-            port = int(sys.argv[3])
-
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.connect((host, port))
-    s.sendall(f"{username}\n".encode())
+    s.sendall(f"{sys.argv[1]}\n".encode())
     if s.recv(1024).rstrip().decode() == '1':
-        print(f"Your login: {username}")
-        cmdline = Client(socket=s)
+        print("<<< Welcome to Python-MUD 0.1 >>>")
+        print(f"Your login: {sys.argv[1]}")
+        if file is None:
+            cmdline = Client(socket=s)
+        else:
+            cmdline = Client(socket=s, stdin=file)
+            cmdline.prompt = ''
+            cmdline.use_rawinput = False
         mes = threading.Thread(target=cmdline.from_srv, args=(cmdline, s))
         mes.start()
-
-        if filemode:
-            with open(filename, 'r') as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith('#'):
-                        continue
-                    print(f"Executing: {line}")
-                    cmdline.onecmd(line)
-                    time.sleep(1)
-            cmdline.do_EOF()
-            print(_("All commands from file are done. Logout"))
-        else:
-            cmdline.cmdloop()
-
+        cmdline.cmdloop()
     else:
-        print(_("This login is already assigned"))
+        print("ERROR: Choose another login")
     s.shutdown(socket.SHUT_RDWR)
+    if file:
+        file.close()
+
+
+if __name__ == '__main__':
+    run_client()

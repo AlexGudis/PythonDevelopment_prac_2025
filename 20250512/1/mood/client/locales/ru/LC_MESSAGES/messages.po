@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-05-24 14:22+0300\n"
+"POT-Creation-Date: 2025-05-26 12:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,63 +19,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:34
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:32
 msgid "<<< Welcome to Python-MUD 0.1 >>>"
 msgstr "<<< Добро пожаловать в Python-MUD 0.1 >>>"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:57
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:63
 msgid "Incorrect name of the monster. It does not exists"
 msgstr "Невеное имя монстра. Оно не существует"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:64
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:70
 msgid "Something wrong with hello string when trying to parse it to a monster"
 msgstr ""
 "Что-то не так с фразой монстра при попытке распарсить её и закрепить за "
 "монстром"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:72
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:78
 msgid "hp argument should be a positive integer"
 msgstr "Очки здоровья должны быть положительным целым числом"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:79
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:85
 msgid "Something wrong with coords when trying to parse it to a monster"
 msgstr ""
 "Что-то не так с координатами монстра при попытке их распарсить и "
 "закрепить за монстром"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:90
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:98
 msgid "Smth wrong with this command"
 msgstr "Что-то не так с этой командой"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:109
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:127
 msgid "Incorrect mode"
 msgstr "Неверный режим"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:121
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:141
 msgid "Choose another locale"
 msgstr "Выберите другую локаль"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:127
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:149
 msgid "Invalid input. You should provide at least name of the monster to attack"
 msgstr "Неверный ввод. Вам необходимо предоставить хотя бы имя монстра для атаки"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:136
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:158
 msgid "Unknown weapon"
 msgstr "Неизвестный вид оружия"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:172
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__init__.py:198
 msgid "You should input your message to others"
 msgstr "Необходимо ввести сообщение всем игрокам"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__main__.py:22
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__main__.py:29
 msgid "din din din din"
 msgstr "ДОН ДОН ДОН ДОН"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__main__.py:71
-msgid "All commands from file are done. Logout"
-msgstr "Все команды из файла выполнены. Выход"
+#~ msgid "All commands from file are done. Logout"
+#~ msgstr "Все команды из файла выполнены. Выход"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/client/__main__.py:77
-msgid "This login is already assigned"
-msgstr "Этот логин уже занят"
+#~ msgid "This login is already assigned"
+#~ msgstr "Этот логин уже занят"
 

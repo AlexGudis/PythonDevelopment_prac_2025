@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-05-24 14:22+0300\n"
+"POT-Creation-Date: 2025-05-26 12:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,100 +17,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:84
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:82
 msgid "Heloo!!!"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:126
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:123
 #, python-brace-format
 msgid "Set up locale: {args}"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:150
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:145
 #, python-brace-format
 msgid "Moved to ({x}, {y})\n"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:155
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:151
 msgid "Replaced the old monster\n"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:156
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:152
 #, python-brace-format
 msgid ""
 "Added monster {name} to ({x}, {y}) saying {hello}\n"
 "{replaced}"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:159
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:155
 #, python-brace-format
 msgid "{name} died\n"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:161
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:157
 #, python-brace-format
 msgid "{name} now has"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:161
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:158
 #, python-brace-format
 msgid " {hp} hit point\n"
 msgid_plural " {hp} hit points\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:162
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:159
 #, python-brace-format
 msgid "{login} attacked {name}"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:162
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:159
 #, python-brace-format
 msgid ", damage {damage} hit point\n"
 msgid_plural ", damage {damage} hit points\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:164
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:161
 #, python-brace-format
 msgid "New player: {login}"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:166
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:163
 #, python-brace-format
 msgid "{login} left"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:315
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:304
 msgid "Moving monsters: on"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:318
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:307
 msgid "Moving monsters: off"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:423
 msgid "right"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:423
 msgid "left"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:424
 msgid "up"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:432
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:424
 msgid "down"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:488
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:481
 #, python-brace-format
 msgid "{name} moved one cell {direction}"
 msgstr ""
 
-#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:491
+#: /home/alexgud/study/msu/kurs3/sem6/PythonDevelopment_prac_2025/20250512/1/mood/server/__init__.py:484
 #, python-brace-format
 msgid "{name} new coords is {x}, {y}"
 msgstr ""

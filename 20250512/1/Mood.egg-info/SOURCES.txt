@@ -28,6 +28,8 @@ docs/build/html/py-modindex.html
 docs/build/html/search.html
 docs/build/html/searchindex.js
 docs/build/html/_images/Saturno_Saturnita.png
+docs/build/html/_modules/index.html
+docs/build/html/_modules/mood/client/__main__.html
 docs/build/html/_sources/index.rst.txt
 docs/build/html/_sources/modules.rst.txt
 docs/build/html/_sources/mood_client.rst.txt

@@ -42,7 +42,8 @@ class Client(cmd.Cmd):
     
     def do_documentation(self, args):
         """Open documentation in browser"""
-        webbrowser.open(f"{str(Path(__file__).parents[1])}/docs/build/html/index.html")
+        print(f"{str(Path(__file__).parents[1])}")
+        webbrowser.open(f"{str(Path(__file__).parents[1])}/../docs/build/html/index.html")
 
     def addmon_params_check(self, args):
         """Check params before adding monster"""
